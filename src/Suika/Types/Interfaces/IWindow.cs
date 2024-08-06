@@ -11,4 +11,14 @@ public interface IWindow
     public void SetupImGui();
     public void Render();
     public void Destroy();
+
+    public void Normalize();
+    public void Maximize();
+    public void Minimize();
+    public void Activate();
+
+    public void Show();
+    public void Hide();
+
+    public void SetTitle(string title);
 }

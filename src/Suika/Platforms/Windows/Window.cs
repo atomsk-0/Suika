@@ -4,6 +4,7 @@ using Suika.Data;
 using Suika.Types.Interfaces;
 using TerraFX.Interop.DirectX;
 using TerraFX.Interop.Windows;
+using static TerraFX.Interop.DirectX.D3DPRESENT;
 using static TerraFX.Interop.Windows.CS;
 using static TerraFX.Interop.Windows.PM;
 using static TerraFX.Interop.Windows.SC;
@@ -30,10 +31,14 @@ public unsafe class Window : IWindow
     private IDirect3DDevice9* device;
     private bool deviceLost;
 
+    private WindowOptions windowOptions;
+
     private static uint resizeWidth, resizeHeight;
 
     public void Create(in WindowOptions options)
     {
+        windowOptions = options;
+
         fixed (char* classNamePtr = class_name)
         {
             var lWndc = new WNDCLASSEXW
@@ -151,10 +156,55 @@ public unsafe class Window : IWindow
         ImGui.ImGui_ImplDX9_Shutdown();
         ImGui.ImGui_ImplWin32_Shutdown();
         ImGui.DestroyContext();
-        
+
         cleanupDeviceD3D9();
         DestroyWindow(handle);
         UnregisterClassW(wndclass.lpszClassName, wndclass.hInstance);
+    }
+
+
+    public void Normalize()
+    {
+        ShowWindowAsync(handle, SW_NORMAL);
+    }
+
+    public void Maximize()
+    {
+        ShowWindowAsync(handle, SW_MAXIMIZE);
+    }
+
+    public void Minimize()
+    {
+        ShowWindowAsync(handle, SW_MINIMIZE);
+    }
+
+
+    public void Activate()
+    {
+        SetActiveWindow(handle);
+        SetFocus(handle);
+        SetForegroundWindow(handle);
+    }
+
+
+    public void Show()
+    {
+        ShowWindowAsync(handle, SW_SHOWDEFAULT);
+    }
+
+
+    public void Hide()
+    {
+        ShowWindowAsync(handle, SW_HIDE);
+    }
+
+
+    public void SetTitle(string title)
+    {
+        fixed(char* titlePtr = title)
+        {
+            SetWindowTextW(handle, titlePtr);
+        }
     }
 
 
@@ -170,12 +220,12 @@ public unsafe class Window : IWindow
             BackBufferFormat = D3DFORMAT.D3DFMT_UNKNOWN,
             EnableAutoDepthStencil = true,
             AutoDepthStencilFormat = D3DFORMAT.D3DFMT_D16,
-            PresentationInterval = 0x80000000, // D3DPRESENT_INTERVAL_IMMEDIATE
+            PresentationInterval = windowOptions.VSync ? D3DPRESENT_INTERVAL_ONE : D3DPRESENT_INTERVAL_IMMEDIATE
         };
 
         IDirect3DDevice9* lDevice = null;
 
-        if (d3d9->CreateDevice(0, D3DDEVTYPE.D3DDEVTYPE_HAL, handle, 0x00000040, &lD3dpp, &lDevice) < 0) return false; // D3DADAPTER_DEFAULT and D3DCREATE_HARDWARE_VERTEXPROCESSING
+        if (d3d9->CreateDevice(DirectX.D3DADAPTER_DEFAULT, D3DDEVTYPE.D3DDEVTYPE_HAL, handle, D3DCREATE.D3DCREATE_HARDWARE_VERTEXPROCESSING, &lD3dpp, &lDevice) < 0) return false;
 
         d3dpp = lD3dpp;
         device = lDevice;
