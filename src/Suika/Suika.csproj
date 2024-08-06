@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsAotCompatible>true</IsAotCompatible>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Types\Enums\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\vendor\Mochi.DearImGui\Mochi.DearImGui.Native\Mochi.DearImGui.Native.csproj" />
+      <ProjectReference Include="..\..\vendor\Mochi.DearImGui\Mochi.DearImGui\Mochi.DearImGui.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NativeFileDialogNET" Version="2.0.0" />
+      <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100" />
+    </ItemGroup>
+
+</Project>
