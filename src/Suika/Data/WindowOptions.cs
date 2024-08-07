@@ -2,17 +2,20 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Drawing;
+using Suika.Components;
+using Suika.Components.Base;
 
 namespace Suika.Data;
 
 public struct WindowOptions
 {
-    public string Title { get; init; }
-    public Size Size { get; init; }
-    public bool TitleBar { get; init; }
-    public bool AllowResize { get; init; }
-    public bool VSync { get; init; }
-    public int MaxFps { get; init; }
+    public string Title { get; set; }
+    public Size Size { get; set; }
+    public bool TitleBar { get; set; }
+    public bool AllowResize { get; set; }
+    public bool VSync { get; set; }
+    public int MaxFps { get; set; }
+    public TitleBar TitleBarComponent { get; set; }
 
     // Default
     public static WindowOptions Default => new()
@@ -22,6 +25,7 @@ public struct WindowOptions
         TitleBar = true,
         AllowResize = true,
         MaxFps = -1,
-        VSync = true
+        VSync = true,
+        TitleBarComponent = new DefaultTitleBar()
     };
 }

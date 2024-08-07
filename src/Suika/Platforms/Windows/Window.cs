@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Numerics;
+using System.Runtime.InteropServices;
 using Mochi.DearImGui;
 using Suika.Data;
 using Suika.Types.Interfaces;
@@ -6,8 +7,10 @@ using TerraFX.Interop.DirectX;
 using TerraFX.Interop.Windows;
 using static TerraFX.Interop.DirectX.D3DPRESENT;
 using static TerraFX.Interop.Windows.CS;
+using static TerraFX.Interop.Windows.MOUSEEVENTF;
 using static TerraFX.Interop.Windows.PM;
 using static TerraFX.Interop.Windows.SC;
+using static TerraFX.Interop.Windows.SM;
 using static TerraFX.Interop.Windows.SW;
 using static TerraFX.Interop.Windows.Windows;
 using static TerraFX.Interop.Windows.WM;
@@ -67,6 +70,8 @@ public unsafe class Window : IWindow
 
         ShowWindow(handle, SW_SHOWDEFAULT);
         UpdateWindow(handle);
+
+        windowOptions.TitleBarComponent.SetWindow(this);
     }
 
 
@@ -126,7 +131,11 @@ public unsafe class Window : IWindow
             ImGui.ImGui_ImplWin32_NewFrame();
             ImGui.NewFrame();
 
-            ImGui.ShowDemoWindow();
+            ImGui.SetNextWindowPos(Vector2.Zero, ImGuiCond.Once, Vector2.Zero);
+            ImGui.SetNextWindowSize(GetViewSize(), ImGuiCond.Always);
+            ImGui.Begin("suika_imgui_window", null, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration);
+            windowOptions.TitleBarComponent.Render();
+            ImGui.End();
 
             ImGui.EndFrame();
 
@@ -187,6 +196,20 @@ public unsafe class Window : IWindow
     }
 
 
+    public void DragWindow()
+    {
+        ReleaseCapture();
+        SendMessageW(handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+    }
+
+
+    public void SimulateLeftMouseClick()
+    {
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+    }
+
+
     public void Show()
     {
         ShowWindowAsync(handle, SW_SHOWDEFAULT);
@@ -196,6 +219,58 @@ public unsafe class Window : IWindow
     public void Hide()
     {
         ShowWindowAsync(handle, SW_HIDE);
+    }
+
+
+    public float GetTitleBarPadding()
+    {
+        int padding = GetSystemMetricsForDpi(SM_CXPADDEDBORDER, USER_DEFAULT_SCREEN_DPI);
+        return padding;
+    }
+
+
+    public float GetTitleBarTopOffset()
+    {
+        return IsMaximized() ? GetTitleBarPadding() * 2 : 0.0f;
+    }
+
+
+    public float GetTitleBarHeight()
+    {
+        /*int titleBarHeight = GetSystemMetricsForDpi(SM_CYCAPTION, USER_DEFAULT_SCREEN_DPI);
+        return titleBarHeight;*/
+
+        return 32.0f + GetTitleBarTopOffset();
+    }
+
+
+    public float GetCaptionButtonWidth()
+    {
+        return 36.0f;
+    }
+
+
+    public RectF GetTitleBarRect()
+    {
+        float height = GetTitleBarHeight();
+        RECT rect = default;
+        GetClientRect(handle, &rect);
+        rect.bottom = rect.top + (int)height;
+        return new RectF(rect.left, rect.right, rect.top, rect.bottom);
+    }
+
+
+    public Vector2 GetViewSize()
+    {
+        RECT rect = default;
+        GetClientRect(handle, &rect);
+        return new Vector2(rect.right - rect.left, rect.bottom - rect.top);
+    }
+
+
+    public bool IsMaximized()
+    {
+        return false; //TODO: Implement this
     }
 
 

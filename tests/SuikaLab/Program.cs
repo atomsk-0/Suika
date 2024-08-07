@@ -16,10 +16,12 @@ internal static class Program
 
     public static void Main()
     {
-        Window window = new Window();
-        window.Create(WindowOptions.Default);
-        window.SetupImGui();
-        window.Render();
-        window.Destroy();
+        App app = new App();
+
+        var options = WindowOptions.Default;
+        options.Title = "SuikaLab";
+
+        app.OpenWindow(options);
+        app.Run();
     }
 }
