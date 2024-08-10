@@ -1,3 +1,5 @@
-﻿// AOT test for Suika
+﻿using Suika;
+using Suika.Data;
 
-Console.WriteLine("");
+Application app = new Application(AppOptions.DefaultWindows);
+app.Run();

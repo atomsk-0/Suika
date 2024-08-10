@@ -27,4 +27,8 @@
         <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Suika\Suika.csproj" />
+    </ItemGroup>
+
 </Project>

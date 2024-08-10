@@ -17,6 +17,7 @@ namespace Suika.Platforms.Windows;
 public unsafe class Window : IWindow
 {
     private const string class_name = "Suika::Window";
+    private const byte loop_timer_id = 1;
 
     private WNDCLASSEXW wndclass;
     private HWND handle;
@@ -76,16 +77,16 @@ public unsafe class Window : IWindow
     {
         while (running)
         {
-            Console.WriteLine("0");
+            //Console.WriteLine("0");
             MSG msg;
             while (PeekMessageW(&msg, HWND.NULL, 0, 0, PM.PM_REMOVE))
             {
-                Console.WriteLine("1");
+                //Console.WriteLine("1");
                 TranslateMessage(&msg);
                 DispatchMessageW(&msg);
                 if (msg.message == WM.WM_QUIT) running = false;
             }
-            Console.WriteLine("2");
+            //Console.WriteLine("2");
             if (running == false) break;
             backend.Render(() => {});
         }
@@ -121,6 +122,29 @@ public unsafe class Window : IWindow
             {
                 if ((wParam & 0xFFF0) == SC.SC_KEYMENU) return 0;
                 break;
+            }
+            case WM.WM_ENTERSIZEMOVE | WM.WM_ENTERMENULOOP:
+            {
+                nuint ret = SetTimer(handle, loop_timer_id, USER_TIMER_MINIMUM, null);
+                if (ret == 0)
+                {
+                    throw new Exception("Failed to set timer");
+                }
+                return 0;
+            }
+            case WM.WM_EXITSIZEMOVE | WM.WM_EXITMENULOOP:
+            {
+                KillTimer(handle, loop_timer_id);
+                return 0;
+            }
+            case WM.WM_TIMER:
+            {
+                if (wParam == loop_timer_id)
+                {
+                    backend.Render(() => {});
+                    return 0;
+                }
+                return 0;
             }
             case WM.WM_DESTROY:
             {

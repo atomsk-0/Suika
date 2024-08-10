@@ -124,7 +124,10 @@ public unsafe class D3D9Backend : IBackend
         ImGui.SetNextWindowPos(Vector2.Zero, ImGuiCond.Once, Vector2.Zero);
         ImGui.SetNextWindowSize(imguiWindowSize, ImGuiCond.Always);
         ImGui.Begin("suika_imgui_window", null, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration);
+        ImGui.Text("KONTOL");
         ImGui.End();
+
+        ImGui.ShowDemoWindow();
 
         ImGui.EndFrame();
 
