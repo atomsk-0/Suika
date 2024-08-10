@@ -9,17 +9,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Types\Enums\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\vendor\Mochi.DearImGui\Mochi.DearImGui.Native\Mochi.DearImGui.Native.csproj" />
-      <ProjectReference Include="..\..\vendor\Mochi.DearImGui\Mochi.DearImGui\Mochi.DearImGui.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="NativeFileDialogNET" Version="2.0.0" />
       <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Platforms\Linux\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\vendor\Mochi.DearImGui\Mochi.DearImGui\Mochi.DearImGui.csproj" />
     </ItemGroup>
 
 </Project>
