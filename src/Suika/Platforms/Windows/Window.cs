@@ -26,6 +26,9 @@ public unsafe class Window : IWindow
 
     private bool running = true;
 
+    private delegate LRESULT WndProcDelegate(HWND window, uint msg, WPARAM wParam, LPARAM lParam);
+    private WndProcDelegate wndProcDelegate;
+
     public void Create(in AppOptions appOptions)
     {
         options = appOptions;
@@ -33,8 +36,11 @@ public unsafe class Window : IWindow
         backend = options.RenderBackend switch
         {
             RenderBackend.DirectX9 => new D3D9Backend(),
+            RenderBackend.OpenGl => new OpenGlBackend(),
             _ => throw new ArgumentOutOfRangeException()
         };
+
+        wndProcDelegate = winProc;
 
         fixed (char* classNamePtr = class_name)
         {
@@ -42,7 +48,7 @@ public unsafe class Window : IWindow
             {
                 cbSize = (uint)sizeof(WNDCLASSEXW),
                 style = CS.CS_CLASSDC,
-                lpfnWndProc = &winProc,
+                lpfnWndProc = (delegate* unmanaged<HWND, uint, WPARAM, LPARAM, LRESULT>)Marshal.GetFunctionPointerForDelegate(wndProcDelegate),
                 hInstance = GetModuleHandleW(null),
                 hCursor = HCURSOR.NULL,
                 hbrBackground = HBRUSH.NULL,
@@ -53,11 +59,11 @@ public unsafe class Window : IWindow
 
             fixed (char* titlePtr = options.Title)
             {
-                handle = CreateWindowExW(0, classNamePtr, titlePtr, WS.WS_POPUP, 0, 0, options.Width, options.Height, HWND.NULL, HMENU.NULL, wndclass.hInstance, null);
+                handle = CreateWindowExW(0, classNamePtr, titlePtr, WS.WS_OVERLAPPEDWINDOW, 0, 0, options.Width, options.Height, HWND.NULL, HMENU.NULL, wndclass.hInstance, null);
             }
         }
 
-        if (backend.Setup(handle) == false)
+        if (backend.Setup(this) == false)
         {
             throw new Exception("Failed to setup renderApi"); //TODO: Create custom exception's
         }
@@ -70,15 +76,17 @@ public unsafe class Window : IWindow
     {
         while (running)
         {
+            Console.WriteLine("0");
             MSG msg;
             while (PeekMessageW(&msg, HWND.NULL, 0, 0, PM.PM_REMOVE))
             {
+                Console.WriteLine("1");
                 TranslateMessage(&msg);
                 DispatchMessageW(&msg);
                 if (msg.message == WM.WM_QUIT) running = false;
             }
+            Console.WriteLine("2");
             if (running == false) break;
-
             backend.Render(() => {});
         }
     }
@@ -90,15 +98,23 @@ public unsafe class Window : IWindow
         UnregisterClassW(wndclass.lpszClassName, wndclass.hInstance);
     }
 
-    [UnmanagedCallersOnly]
-    private static LRESULT winProc(HWND window, uint message, WPARAM wParam, LPARAM lParam)
+
+    public nint GetHandle()
     {
-        if (ImGui.ImGui_ImplWin32_WndProcHandler((int*)window, message, wParam, lParam) > 0) return 1;
-        switch (message)
+        return handle;
+    }
+
+    public Action<int, int>? OnResize { get; set; }
+
+    private LRESULT winProc(HWND window, uint msg, WPARAM wParam, LPARAM lParam)
+    {
+        if (ImGui.ImGui_ImplWin32_WndProcHandler((int*)window, msg, wParam, lParam) > 0) return 1;
+        switch (msg)
         {
             case WM.WM_SIZE:
             {
                 if (wParam == SIZE_MINIMIZED) return 0;
+                OnResize?.Invoke(LOWORD(lParam), HIWORD(lParam));
                 return 0;
             }
             case WM.WM_SYSCOMMAND:
@@ -112,6 +128,6 @@ public unsafe class Window : IWindow
                 return 0;
             }
         }
-        return DefWindowProcW(window, message, wParam, lParam);
+        return DefWindowProcW(window, msg, wParam, lParam);
     }
 }

@@ -29,5 +29,6 @@ public class Application
     public void Run()
     {
         window.Render();
+        window.Destroy();
     }
 }

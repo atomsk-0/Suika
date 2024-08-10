@@ -5,7 +5,7 @@ namespace Suika.Types.Interfaces;
 
 public interface IBackend
 {
-    public bool Setup(IntPtr windowHandle);
+    public bool Setup(IWindow windowInstance);
     public void Reset();
     public void Destroy();
 
@@ -13,7 +13,4 @@ public interface IBackend
 
     public nint LoadImageFromFile(string path);
     public nint LoadImageFromMemory(Stream stream);
-
-    public void ImGuiInit();
-    public void ImGuiShutdown();
 }

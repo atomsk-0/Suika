@@ -10,4 +10,8 @@ public interface IWindow
     public void Create(in AppOptions appOptions);
     public void Render();
     public void Destroy();
+
+    public nint GetHandle();
+
+    public Action<int, int>? OnResize { get; set; }
 }
