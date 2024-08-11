@@ -24,7 +24,7 @@ public struct AppOptions
         Height = 500,
         VSync = true,
         MaxFps = -1,
-        RenderBackend = RenderBackend.DirectX9
+        RenderBackend = RenderBackend.OpenGl
     };
 
     public static AppOptions DefaultLinux => new()

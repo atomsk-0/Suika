@@ -1,8 +1,8 @@
 ﻿// Copyright (c) atomsk <baddobatsu@protonmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Mochi.DearImGui;
 using Suika.Data;
 using Suika.Platforms.Windows.Backends;
 using Suika.Types.Enums;
@@ -14,10 +14,10 @@ using static TerraFX.Interop.Windows.Windows;
 
 namespace Suika.Platforms.Windows;
 
-public unsafe class Window : IWindow
+public unsafe partial class Window : IWindow
 {
-    [DllImport("Mochi.DearImGui.Native.dll")]
-    private static extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam);
+    [LibraryImport("Mochi.DearImGui.Native.dll")]
+    private static partial LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam);
 
     private const string class_name = "Suika::Window";
     private const byte loop_timer_id = 1;
@@ -31,7 +31,7 @@ public unsafe class Window : IWindow
     private bool running = true;
 
     private delegate LRESULT WndProcDelegate(HWND window, uint msg, WPARAM wParam, LPARAM lParam);
-    private WndProcDelegate wndProcDelegate;
+    private WndProcDelegate wndProcDelegate = null!;
 
     public void Create(in AppOptions appOptions)
     {
@@ -40,7 +40,8 @@ public unsafe class Window : IWindow
         backend = options.RenderBackend switch
         {
             RenderBackend.DirectX9 => new D3D9Backend(),
-            RenderBackend.OpenGl => new OpenGlBackend(),
+            RenderBackend.DirectX12 => new D3D12Backend(),
+            RenderBackend.OpenGl => new Win32OpenGl(),
             _ => throw new ArgumentOutOfRangeException()
         };
 

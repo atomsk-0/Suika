@@ -3,6 +3,8 @@
 
 using System.Numerics;
 using Mochi.DearImGui;
+using Mochi.DearImGui.Backends.Direct3D9;
+using Mochi.DearImGui.Backends.Win32;
 using Suika.Types.Interfaces;
 using TerraFX.Interop.DirectX;
 using TerraFX.Interop.Windows;
@@ -52,8 +54,8 @@ public unsafe class D3D9Backend : IBackend
         device = lDevice;
 
         ImGui.CreateContext();
-        ImGui.ImGui_ImplWin32_Init((void*)windowHandle);
-        ImGui.ImGui_ImplDX9_Init((Mochi.DearImGui.IDirect3DDevice9*)device);
+        Win32ImBackend.Init((void*)windowHandle);
+        Direct3D9ImBackend.Init((Mochi.DearImGui.Backends.Direct3D9.IDirect3DDevice9*)device);
         imGuiInitialized = true;
 
         return true;
@@ -61,7 +63,7 @@ public unsafe class D3D9Backend : IBackend
 
     public void Reset()
     {
-        ImGui.ImGui_ImplDX9_InvalidateDeviceObjects();
+        Direct3D9ImBackend.InvalidateDeviceObjects();
         var ld3dpp = d3dpp;
         HRESULT hr = device->Reset(&ld3dpp);
         d3dpp = ld3dpp;
@@ -69,15 +71,15 @@ public unsafe class D3D9Backend : IBackend
         {
             throw new Exception("Failed to reset device");
         }
-        ImGui.ImGui_ImplDX9_CreateDeviceObjects();
+        Direct3D9ImBackend.CreateDeviceObjects();
     }
 
     public void Destroy()
     {
         if (imGuiInitialized)
         {
-            ImGui.ImGui_ImplDX9_Shutdown();
-            ImGui.ImGui_ImplWin32_Shutdown();
+            Direct3D9ImBackend.Shutdown();
+            Win32ImBackend.Shutdown();
             ImGui.DestroyContext();
         }
 
@@ -116,8 +118,8 @@ public unsafe class D3D9Backend : IBackend
         }
 
         // Frame Render
-        ImGui.ImGui_ImplDX9_NewFrame();
-        ImGui.ImGui_ImplWin32_NewFrame();
+        Direct3D9ImBackend.NewFrame();
+        Win32ImBackend.NewFrame();
         ImGui.NewFrame();
 
         ImGui.SetNextWindowPos(Vector2.Zero, ImGuiCond.Once, Vector2.Zero);
@@ -137,7 +139,7 @@ public unsafe class D3D9Backend : IBackend
         if (device->BeginScene() >= 0)
         {
             ImGui.Render();
-            ImGui.ImGui_ImplDX9_RenderDrawData(ImGui.GetDrawData());
+            Direct3D9ImBackend.RenderDrawData(ImGui.GetDrawData());
             device->EndScene();
         }
 

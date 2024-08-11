@@ -1,11 +1,6 @@
 ﻿// Copyright (c) atomsk <baddobatsu@protonmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-namespace Suika.Types.Enums;
+using System.Runtime.CompilerServices;
 
-public enum RenderBackend
-{
-    DirectX9, // Windows only
-    DirectX12, // Windows only
-    OpenGl // Cross platform
-}
+[assembly: DisableRuntimeMarshalling]
