@@ -16,6 +16,9 @@ namespace Suika.Platforms.Windows;
 
 public unsafe class Window : IWindow
 {
+    [DllImport("Mochi.DearImGui.Native.dll")]
+    private static extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam);
+
     private const string class_name = "Suika::Window";
     private const byte loop_timer_id = 1;
 
@@ -106,7 +109,7 @@ public unsafe class Window : IWindow
 
     private LRESULT winProc(HWND window, uint msg, WPARAM wParam, LPARAM lParam)
     {
-        if (ImGui.ImGui_ImplWin32_WndProcHandler((int*)window, msg, wParam, lParam) > 0) return 1;
+        if (ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam) > 0) return 1;
         switch (msg)
         {
             case WM.WM_SIZE:
