@@ -77,16 +77,13 @@ public unsafe class Window : IWindow
     {
         while (running)
         {
-            //Console.WriteLine("0");
             MSG msg;
             while (PeekMessageW(&msg, HWND.NULL, 0, 0, PM.PM_REMOVE))
             {
-                //Console.WriteLine("1");
                 TranslateMessage(&msg);
                 DispatchMessageW(&msg);
                 if (msg.message == WM.WM_QUIT) running = false;
             }
-            //Console.WriteLine("2");
             if (running == false) break;
             backend.Render(() => {});
         }

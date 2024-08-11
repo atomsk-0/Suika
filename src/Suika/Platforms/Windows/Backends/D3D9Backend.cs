@@ -61,7 +61,6 @@ public unsafe class D3D9Backend : IBackend
 
     public void Reset()
     {
-        Console.WriteLine("Resetting device");
         ImGui.ImGui_ImplDX9_InvalidateDeviceObjects();
         var ld3dpp = d3dpp;
         HRESULT hr = device->Reset(&ld3dpp);
@@ -77,10 +76,11 @@ public unsafe class D3D9Backend : IBackend
     {
         if (imGuiInitialized)
         {
-            ImGui.DestroyContext();
             ImGui.ImGui_ImplDX9_Shutdown();
             ImGui.ImGui_ImplWin32_Shutdown();
+            ImGui.DestroyContext();
         }
+
         if (device != null)
         {
             device->Release();
@@ -112,7 +112,6 @@ public unsafe class D3D9Backend : IBackend
             d3dpp.BackBufferHeight = (uint)backendHeight;
             imguiWindowSize = new Vector2(backendWidth, backendHeight);
             backendHeight = backendWidth = 0;
-            Console.WriteLine("Resized");
             Reset();
         }
 
@@ -124,7 +123,6 @@ public unsafe class D3D9Backend : IBackend
         ImGui.SetNextWindowPos(Vector2.Zero, ImGuiCond.Once, Vector2.Zero);
         ImGui.SetNextWindowSize(imguiWindowSize, ImGuiCond.Always);
         ImGui.Begin("suika_imgui_window", null, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration);
-        ImGui.Text("KONTOL");
         ImGui.End();
 
         ImGui.ShowDemoWindow();
