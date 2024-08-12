@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using Mochi.DearImGui;
 using Mochi.DearImGui.Backends.Direct3D12;
 using Mochi.DearImGui.Backends.Win32;
+using Suika.Data;
 using Suika.Types.Interfaces;
 using TerraFX.Interop.DirectX;
 using TerraFX.Interop.Windows;
@@ -56,7 +57,7 @@ public unsafe partial class D3D12Backend : IBackend
 
     private bool imguiInitialized;
 
-    public bool Setup(IWindow windowInstance)
+    public bool Setup(IWindow windowInstance, in AppOptions options)
     {
         ID3D12Resource** tempMainRenderTargetResource = stackalloc ID3D12Resource*[num_back_buffers];
         mainRenderTargetResource = tempMainRenderTargetResource;
@@ -381,13 +382,13 @@ public unsafe partial class D3D12Backend : IBackend
     }
 
 
-    public IntPtr LoadImageFromFile(string path)
+    public IntPtr LoadTextureFromFile(string path)
     {
         throw new NotImplementedException();
     }
 
 
-    public IntPtr LoadImageFromMemory(Stream stream)
+    public IntPtr LoadTextureFromMemory(Stream stream)
     {
         throw new NotImplementedException();
     }

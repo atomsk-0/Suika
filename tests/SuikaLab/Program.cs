@@ -3,6 +3,7 @@
 
 using Suika;
 using Suika.Data;
+using Suika.Types.Enums;
 
 namespace SuikaLab;
 
@@ -12,7 +13,10 @@ internal static class Program
 
     public static void Main()
     {
-        Application app = new Application(AppOptions.DefaultWindows);
+        var options = AppOptions.DefaultWindows;
+        options.VSync = true;
+        options.RenderBackend = RenderBackend.DirectX9;
+        Application app = new Application(options);
         app.Run();
     }
 }

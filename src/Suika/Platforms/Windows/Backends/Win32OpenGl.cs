@@ -8,6 +8,7 @@ using Mochi.DearImGui.Backends.OpenGL3;
 using Mochi.DearImGui.Backends.Win32;
 using Silk.NET.Core.Contexts;
 using Silk.NET.OpenGL;
+using Suika.Data;
 using Suika.Types.Interfaces;
 using TerraFX.Interop.Windows;
 using GL = Silk.NET.OpenGL.GL;
@@ -30,7 +31,7 @@ public unsafe class Win32OpenGl : IBackend
     private int backendWidth, backendHeight;
     private Vector2 imguiWindowSize;
 
-    public bool Setup(IWindow windowInstance)
+    public bool Setup(IWindow windowInstance, in AppOptions options)
     {
         wgl = new WGL(new DefaultNativeContext("opengl32"));
         gl = new GL(new DefaultNativeContext("opengl32"));
@@ -58,6 +59,14 @@ public unsafe class Win32OpenGl : IBackend
         hrc = (HGLRC)wgl.CreateContext(hdc);
 
         wgl.MakeCurrent(hdc, hrc);
+
+        if (options.VSync)
+        {
+            if (enableVsync() == false)
+            {
+                Console.WriteLine("Failed to enable VSync"); // TODO: Replace with logging system
+            }
+        }
 
         ImGui.CreateContext();
         Win32ImBackend.InitForOpenGL(handle);
@@ -117,13 +126,13 @@ public unsafe class Win32OpenGl : IBackend
     }
 
 
-    public IntPtr LoadImageFromFile(string path)
+    public IntPtr LoadTextureFromFile(string path)
     {
         throw new NotImplementedException();
     }
 
 
-    public IntPtr LoadImageFromMemory(Stream stream)
+    public IntPtr LoadTextureFromMemory(Stream stream)
     {
         throw new NotImplementedException();
     }
@@ -133,5 +142,39 @@ public unsafe class Win32OpenGl : IBackend
         backendWidth = width;
         backendHeight = height;
         imguiWindowSize = new Vector2(width, height);
+    }
+
+    private bool disableVsync()
+    {
+        if (wglExtensionSupported("WGL_EXT_swap_control"))
+        {
+            var wglSwapIntervalExt = (delegate* unmanaged<int, int>)wgl.GetProcAddress("wglSwapIntervalEXT");
+            if (wglSwapIntervalExt == null) return false;
+            wglSwapIntervalExt(0);
+            return true;
+        }
+        return false;
+    }
+
+    private bool enableVsync()
+    {
+        if (wglExtensionSupported("WGL_EXT_swap_control"))
+        {
+            var wglSwapIntervalExt = (delegate* unmanaged<int, int>)wgl.GetProcAddress("wglSwapIntervalEXT");
+            if (wglSwapIntervalExt == null) return false;
+            wglSwapIntervalExt(1);
+            return true;
+        }
+        return false;
+    }
+
+
+    // https://stackoverflow.com/questions/589064/how-to-enable-vertical-sync-in-opengl
+    private bool wglExtensionSupported(string extensionName)
+    {
+        var wglGetExtensionsStringExt = (delegate* unmanaged<void>)wgl.GetProcAddress("wglGetExtensionsStringEXT");
+        if (wglGetExtensionsStringExt == null) return false;
+        sbyte* extensions = ((delegate* unmanaged<void*, sbyte*>)wglGetExtensionsStringExt)(null);
+        return extensions != null && new string(extensions).Contains(extensionName);
     }
 }

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) atomsk <baddobatsu@protonmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Suika.Data;
 using Suika.Platforms.Windows.Backends;
@@ -47,6 +46,15 @@ public unsafe partial class Window : IWindow
 
         wndProcDelegate = winProc;
 
+        int x = options.StartPos.X;
+        int y = options.StartPos.Y;
+        if (x == -1 && y == -1)
+        {
+            var screenSize = Platform.GetScreenSize();
+            x = (screenSize.Width - options.WindowSize.Width) / 2;
+            y = (screenSize.Height - options.WindowSize.Height) / 2;
+        }
+
         fixed (char* classNamePtr = class_name)
         {
             var lWndc = new WNDCLASSEXW
@@ -64,11 +72,11 @@ public unsafe partial class Window : IWindow
 
             fixed (char* titlePtr = options.Title)
             {
-                handle = CreateWindowExW(0, classNamePtr, titlePtr, WS.WS_OVERLAPPEDWINDOW, 0, 0, options.Width, options.Height, HWND.NULL, HMENU.NULL, wndclass.hInstance, null);
+                handle = CreateWindowExW(0, classNamePtr, titlePtr, WS.WS_OVERLAPPEDWINDOW, x, y, options.WindowSize.Width, options.WindowSize.Height, HWND.NULL, HMENU.NULL, wndclass.hInstance, null);
             }
         }
 
-        if (backend.Setup(this) == false)
+        if (backend.Setup(this, options) == false)
         {
             throw new Exception("Failed to setup renderApi"); //TODO: Create custom exception's
         }

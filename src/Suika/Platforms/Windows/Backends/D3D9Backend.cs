@@ -5,6 +5,8 @@ using System.Numerics;
 using Mochi.DearImGui;
 using Mochi.DearImGui.Backends.Direct3D9;
 using Mochi.DearImGui.Backends.Win32;
+using Suika.Data;
+using Suika.Platforms.Windows.Native;
 using Suika.Types.Interfaces;
 using TerraFX.Interop.DirectX;
 using TerraFX.Interop.Windows;
@@ -25,13 +27,15 @@ public unsafe class D3D9Backend : IBackend
     private bool imGuiInitialized;
 
     private IWindow window = null!;
+    private AppOptions options;
     private int backendWidth, backendHeight;
     private Vector2 imguiWindowSize;
 
-    public bool Setup(IWindow windowInstance)
+    public bool Setup(IWindow windowInstance, in AppOptions appOptions)
     {
         if ((d3d9 = DirectX.Direct3DCreate9(D3D.D3D_SDK_VERSION)) == null) return false;
 
+        options = appOptions;
         window = windowInstance;
         nint windowHandle = window.GetHandle();
 
@@ -44,8 +48,9 @@ public unsafe class D3D9Backend : IBackend
             BackBufferFormat = D3DFORMAT.D3DFMT_UNKNOWN,
             EnableAutoDepthStencil = true,
             AutoDepthStencilFormat = D3DFORMAT.D3DFMT_D16,
-            PresentationInterval = D3DPRESENT.D3DPRESENT_INTERVAL_ONE
+            PresentationInterval = appOptions.VSync ? D3DPRESENT.D3DPRESENT_INTERVAL_ONE : D3DPRESENT.D3DPRESENT_INTERVAL_IMMEDIATE
         };
+
         IDirect3DDevice9* lDevice = null;
 
         if (d3d9->CreateDevice(DirectX.D3DADAPTER_DEFAULT, D3DDEVTYPE.D3DDEVTYPE_HAL, (HWND)windowHandle, D3DCREATE.D3DCREATE_HARDWARE_VERTEXPROCESSING, &lD3dpp, &lDevice) < 0) return false;
@@ -148,12 +153,12 @@ public unsafe class D3D9Backend : IBackend
     }
 
 
-    public nint LoadImageFromFile(string path)
+    public nint LoadTextureFromFile(string path)
     {
         throw new NotImplementedException();
     }
 
-    public nint LoadImageFromMemory(Stream stream)
+    public nint LoadTextureFromMemory(Stream stream)
     {
         throw new NotImplementedException();
     }
