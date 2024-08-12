@@ -15,3 +15,22 @@
     - 🛠️ Windows | 🛠️ NativeAOT | (x64 🛠️, arm64 ❌)
     - ❌ MacOS  | ❌ NativeAOT
     - ❌ Linux  | ❌ NativeAOT
+- 🛠️ Rendering Backends
+  - 🛠️ DirectX 9 | 🛠️ Windows
+  - 🛠️ DirectX 12 | 🛠️ Windows
+  - 🛠️ OpenGL 3 | 🛠️ Windows, ❌ MacOS, ❌ Linux
+- 🛠️ Windowing
+  - 🛠️ Win32 | 🛠️ Windows
+  - ❌ GLFW | ❌ Windows | ❌ MacOS | ❌ Linux
+
+## Credits
+- [Dear ImGui](https://github.com/ocornut/imgui)
+- [Mochi.DearImGui](https://github.com/MochiLibraries/Mochi.DearImGui) (C# ImGui bindings)
+
+- This project is inspired by zed's [GPUI](https://github.com/zed-industries/zed/tree/main/crates/gpui) project
+
+## Contributing
+Contributions are welcome! Feel free to open an issue or submit a pull request for any changes.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.

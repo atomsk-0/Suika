@@ -9,14 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Silk.NET.GLFW" Version="2.21.0" />
       <PackageReference Include="Silk.NET.OpenGL" Version="2.21.0" />
       <PackageReference Include="Silk.NET.WGL" Version="2.21.0" />
       <PackageReference Include="Silk.NET.WGL.Extensions.EXT" Version="2.21.0" />
       <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Platforms\Linux\" />
     </ItemGroup>
 
     <ItemGroup>

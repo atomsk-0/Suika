@@ -22,6 +22,8 @@ namespace Suika.Platforms.Windows.Backends;
 
 #pragma warning disable CA1416
 
+// Experimental Direct3D 12 backend, not yet functional has some issues with the swap chain creation
+
 public unsafe partial class D3D12Backend : IBackend
 {
     [LibraryImport("Mochi.DearImGui.Native.dll")]
