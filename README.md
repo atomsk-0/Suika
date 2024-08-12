@@ -18,7 +18,8 @@
 - 🛠️ Rendering Backends
   - 🛠️ DirectX 9 | 🛠️ Windows
   - 🛠️ DirectX 12 | 🛠️ Windows
-  - 🛠️ OpenGL 3 | 🛠️ Windows, ❌ MacOS, ❌ Linux
+  - 🛠️ OpenGL 3 | 🛠️ Windows, ❌ Linux
+  - ❌ Metal | ❌ MacOS
 - 🛠️ Windowing
   - 🛠️ Win32 | 🛠️ Windows
   - ❌ GLFW | ❌ Windows | ❌ MacOS | ❌ Linux
