@@ -83,7 +83,7 @@ public unsafe partial class Window : IWindow
 
             fixed (char* titlePtr = options.Title)
             {
-                handle = CreateWindowExW(0, classNamePtr, titlePtr, WS.WS_POPUP, x, y, options.WindowSize.Width, options.WindowSize.Height, HWND.NULL, HMENU.NULL, wndclass.hInstance, null);
+                handle = CreateWindowExW(0, classNamePtr, titlePtr, options.AllowResize ? WS.WS_OVERLAPPEDWINDOW : WS.WS_POPUP, x, y, options.WindowSize.Width, options.WindowSize.Height, HWND.NULL, HMENU.NULL, wndclass.hInstance, null);
             }
         }
 
@@ -255,9 +255,21 @@ public unsafe partial class Window : IWindow
                 minmax->ptMinTrackSize.y = options.MinSize.Height;
                 return 0;
             }
+            case WM.WM_NCCALCSIZE:
+            {
+                return 0;
+            }
             case WM.WM_SYSCOMMAND:
             {
-                if ((wParam & 0xFFF0) == SC.SC_KEYMENU) return 0;
+                if (wParam == SC.SC_MOVE || wParam == SC.SC_SIZE)
+                {
+                    nint style = GetWindowLongPtrW(handle, GWL.GWL_STYLE);
+                    SetWindowLongPtrW(handle, GWL.GWL_STYLE, style | WS.WS_CAPTION);
+                    DefWindowProcW(handle, msg, wParam, lParam);
+                    SetWindowLongPtrW(handle, GWL.GWL_STYLE, style);
+                    return 0;
+                }
+                if ((wParam & 0xFFF0) == SC.SC_KEYMENU) return 0; // Disable ALT application menu
                 break;
             }
             case WM.WM_ENTERSIZEMOVE | WM.WM_ENTERMENULOOP:
@@ -317,7 +329,6 @@ public unsafe partial class Window : IWindow
                         return HTRIGHT;
                     }
                 }
-
                 return HTCLIENT;
             }
             case WM.WM_DESTROY:
