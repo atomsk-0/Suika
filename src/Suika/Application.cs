@@ -8,12 +8,10 @@ namespace Suika;
 
 public class Application
 {
-    private AppOptions options;
-    private IWindow window;
+    private readonly IWindow window;
 
     public Application(in AppOptions appOptions)
     {
-        options = appOptions;
         if (OperatingSystem.IsWindows())
         {
             window = new Platforms.Windows.Window();
@@ -22,8 +20,12 @@ public class Application
         {
             throw new PlatformNotSupportedException();
         }
+        window.Create(appOptions);
+    }
 
-        window.Create(options);
+    public void SetView(Action view)
+    {
+        window.View = view;
     }
 
     public void Run()
