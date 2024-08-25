@@ -1,6 +1,7 @@
 ﻿// Copyright (c) atomsk <baddobatsu@protonmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using Mochi.DearImGui;
 using Suika;
 using Suika.Data;
 using Suika.Types.Enums;
@@ -17,6 +18,12 @@ internal static class Program
         options.VSync = true;
         options.RenderBackend = RenderBackend.DirectX9;
         Application app = new Application(options);
+        app.SetView(renderView);
         app.Run();
+    }
+
+    private static void renderView()
+    {
+        ImGui.Text($"HELLO WORLD: {DateTime.UtcNow.ToLongTimeString()}");
     }
 }

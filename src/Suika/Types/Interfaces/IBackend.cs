@@ -11,7 +11,7 @@ public interface IBackend
     public void Reset();
     public void Destroy();
 
-    public void Render(Action renderAction);
+    public void Render(Action? renderAction);
 
     public nint LoadTextureFromFile(string path);
     public nint LoadTextureFromMemory(Stream stream);

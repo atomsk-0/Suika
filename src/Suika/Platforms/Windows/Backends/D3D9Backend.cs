@@ -1,12 +1,12 @@
-﻿// Copyright (c) atomsk <baddobatsu@protonmail.com>. Licensed under the MIT Licence.
+// Copyright (c) atomsk <baddobatsu@protonmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Numerics;
 using Mochi.DearImGui;
 using Mochi.DearImGui.Backends.Direct3D9;
 using Mochi.DearImGui.Backends.Win32;
+using Suika.Components.Internal;
 using Suika.Data;
-using Suika.Platforms.Windows.Native;
 using Suika.Types.Interfaces;
 using TerraFX.Interop.DirectX;
 using TerraFX.Interop.Windows;
@@ -99,7 +99,8 @@ public unsafe class D3D9Backend : IBackend
             d3d9 = null;
         }
     }
-    public void Render(Action renderAction)
+
+    public void Render(Action? renderAction)
     {
         if (deviceLost)
         {
@@ -126,20 +127,19 @@ public unsafe class D3D9Backend : IBackend
         Direct3D9ImBackend.NewFrame();
         Win32ImBackend.NewFrame();
         ImGui.NewFrame();
-
         ImGui.SetNextWindowPos(Vector2.Zero, ImGuiCond.Once, Vector2.Zero);
         ImGui.SetNextWindowSize(imguiWindowSize, ImGuiCond.Always);
         ImGui.Begin("suika_imgui_window", null, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration);
+        renderAction?.Invoke();
         ImGui.End();
-
-        ImGui.ShowDemoWindow();
-
         ImGui.EndFrame();
+
 
         device->SetRenderState(D3DRENDERSTATETYPE.D3DRS_ZENABLE, 0);
         device->SetRenderState(D3DRENDERSTATETYPE.D3DRS_ALPHABLENDENABLE, 0);
         device->SetRenderState(D3DRENDERSTATETYPE.D3DRS_SCISSORTESTENABLE, 0);
         device->Clear(0, null, D3DCLEAR.D3DCLEAR_TARGET | D3DCLEAR.D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
+
 
         if (device->BeginScene() >= 0)
         {
@@ -150,6 +150,16 @@ public unsafe class D3D9Backend : IBackend
 
         HRESULT result = device->Present(null, null, HWND.NULL, null);
         if (result == D3DERR.D3DERR_DEVICELOST) deviceLost = true;
+
+        // We don't want this to be called from timed render loop so we use track lock
+        if (TitleBar.IsDragging && TitleBar.TrackLock == false) // TODO: Improve this logic
+        {
+            TitleBar.TrackLock = true;
+            window.DragWindow();
+            window.Activate();
+            Platform.SimulateLeftMouseClick();
+            TitleBar.TrackLock = false;
+        }
     }
 
 
