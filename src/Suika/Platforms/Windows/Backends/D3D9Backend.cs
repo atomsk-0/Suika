@@ -81,12 +81,13 @@ public unsafe class D3D9Backend : IBackend
 
     public void Destroy()
     {
-        if (imGuiInitialized)
+        // Causes Assertion failure in ImGui and crashes the program...
+        /*if (imGuiInitialized)
         {
             Direct3D9ImBackend.Shutdown();
             Win32ImBackend.Shutdown();
             ImGui.DestroyContext();
-        }
+        }*/
 
         if (device != null)
         {
