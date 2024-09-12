@@ -24,6 +24,7 @@ public interface IWindow
     public float GetCaptionButtonWidth();
     public RectF GetTitleBarRect();
     public Vector2 GetViewSize();
+    public bool CanResize();
 
     public void Activate();
     public void DragWindow();

@@ -18,6 +18,10 @@ internal static unsafe class Platform
     private const ushort windows_11_min_build = 22000;
     private const string segoe_icons_font = "C:\\Windows\\Fonts\\SegoeIcons.ttf";
     private const string segmdl12_font = "C:\\Windows\\Fonts\\segmdl2.ttf";
+    internal const string MINIMIZE_ICON = "\uE921";
+    internal const string MAXIMIZE_ICON = "\uE922";
+    internal const string RESTORE_ICON = "\uE923";
+    internal const string CLOSE_ICON = "\uE8BB";
 
     internal static ImFont* SystemFont;
 
