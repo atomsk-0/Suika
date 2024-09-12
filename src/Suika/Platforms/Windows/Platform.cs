@@ -16,6 +16,10 @@ namespace Suika.Platforms.Windows;
 internal static unsafe class Platform
 {
     private const ushort windows_11_min_build = 22000;
+    private const string segoe_icons_font = "C:\\Windows\\Fonts\\SegoeIcons.ttf";
+    private const string segmdl12_font = "C:\\Windows\\Fonts\\segmdl2.ttf";
+
+    internal static ImFont* SystemFont;
 
     /// <summary>
     /// Get the primary monitor screen size
@@ -35,15 +39,15 @@ internal static unsafe class Platform
     {
         if (IsWindows11())
         {
-            SetWindows11Styling(hWnd, options);
+            SetWindows11Style(hWnd, options);
         }
         else
         {
-            SetWindows10Styling(hWnd);
+            SetWindows10Style();
         }
     }
 
-    internal static void SetWindows11Styling(HWND hWnd, in AppOptions options)
+    internal static void SetWindows11Style(HWND hWnd, in AppOptions options)
     {
         // Round window corners
         uint val = (uint)DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
@@ -56,22 +60,77 @@ internal static unsafe class Platform
             DwmSetWindowAttribute(hWnd, (uint)DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, &val2, sizeof(uint));
         }
 
+        ImGuiIO* io = ImGui.GetIO();
+        io->Fonts->AddFontDefault();
+
         ImGuiStyle* style = ImGui.GetStyle();
         style->WindowBorderSize = options.UseWindows11Border ? 0.0f : 1.0f;
         style->WindowRounding = 8.0f;
         style->ItemSpacing = new Vector2(0.0f, 0.0f);
         style->Colors[(int)ImGuiCol.Border] = new Vector4(1f, 1f, 1f, 0.2f);
         style->Colors[(int)ImGuiCol.WindowBg] = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+
+        // Load SegoeIcons font (Windows 11 icons)
+        if (File.Exists(segoe_icons_font))
+        {
+            char[] iconRanges = ['\uE001', '\uF8CC', '\0'];
+            var iconsConfig = new ImFontConfig
+            {
+                MergeMode = false,
+                PixelSnapH = true,
+                GlyphMinAdvanceX = 10f
+            };
+
+            fixed (char* iconRangesPtr = iconRanges)
+            {
+                SystemFont = io->Fonts->AddFontFromFileTTF(segoe_icons_font, 10f, &iconsConfig, iconRangesPtr);
+            }
+        }
+        else if (File.Exists(segmdl12_font))
+        {
+            // Fallback to segmdl2 font
+            char[] iconRanges = ['\uE001', '\uF8B3', '\0'];
+            var iconCOnfig = new ImFontConfig
+            {
+                MergeMode = false,
+                PixelSnapH = true,
+                GlyphMinAdvanceX = 10f
+            };
+
+            fixed (char* iconRangesPtr = iconRanges)
+            {
+                SystemFont = io->Fonts->AddFontFromFileTTF(segmdl12_font, 10f, &iconCOnfig, iconRangesPtr);
+            }
+        }
     }
 
-    internal static void SetWindows10Styling(HWND hWnd)
+    internal static void SetWindows10Style()
     {
+        ImGuiIO* io = ImGui.GetIO();
+        io->Fonts->AddFontDefault();
+
         ImGuiStyle* style = ImGui.GetStyle();
         style->WindowBorderSize = 1.0f;
         style->WindowRounding = 0.0f;
         style->ItemSpacing = new Vector2(0.0f, 0.0f);
         style->Colors[(int)ImGuiCol.Border] = new Vector4(1f, 1f, 1f, 0.2f);
         style->Colors[(int)ImGuiCol.WindowBg] = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+
+        if (File.Exists(segmdl12_font))
+        {
+            char[] iconRanges = ['\uE001', '\uF8B3', '\0'];
+            var iconCOnfig = new ImFontConfig
+            {
+                MergeMode = false,
+                PixelSnapH = true,
+                GlyphMinAdvanceX = 10f
+            };
+
+            fixed (char* iconRangesPtr = iconRanges)
+            {
+                SystemFont = io->Fonts->AddFontFromFileTTF(segmdl12_font, 10f, &iconCOnfig, iconRangesPtr);
+            }
+        }
     }
 
     internal static void SimulateLeftMouseClick()
