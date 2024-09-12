@@ -53,6 +53,8 @@ public struct AppOptions
     /// </summary>
     public RenderBackend RenderBackend { get; set; }
 
+    public Color TitleBarBackgroundColor { get; set; }
+
     public static AppOptions DefaultWindows => new()
     {
         Title = "Suika Window",

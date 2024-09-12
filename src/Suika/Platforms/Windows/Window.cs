@@ -1,6 +1,7 @@
 ﻿// Copyright (c) atomsk <baddobatsu@protonmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Mochi.DearImGui;
@@ -25,7 +26,7 @@ public unsafe partial class Window : IWindow
     private const byte loop_timer_id = 1;
     private const byte border_width = 8;
 
-    private WNDCLASSEXW wndclass;
+    private WNDCLASSEXW wndClass;
     private HWND handle;
 
     private AppOptions options;
@@ -79,11 +80,11 @@ public unsafe partial class Window : IWindow
                 lpszClassName = classNamePtr
             };
             RegisterClassExW(&lWndc);
-            wndclass = lWndc;
+            wndClass = lWndc;
 
             fixed (char* titlePtr = options.Title)
             {
-                handle = CreateWindowExW(0, classNamePtr, titlePtr, options.AllowResize ? WS.WS_OVERLAPPEDWINDOW : WS.WS_POPUP, x, y, options.WindowSize.Width, options.WindowSize.Height, HWND.NULL, HMENU.NULL, wndclass.hInstance, null);
+                handle = CreateWindowExW(0, classNamePtr, titlePtr, options.AllowResize ? WS.WS_OVERLAPPEDWINDOW : WS.WS_POPUP, x, y, options.WindowSize.Width, options.WindowSize.Height, HWND.NULL, HMENU.NULL, wndClass.hInstance, null);
             }
         }
 
@@ -96,7 +97,7 @@ public unsafe partial class Window : IWindow
         UpdateWindow(handle);
 
         Platform.SetWindowStyle(handle, options);
-        TitleBar.SetWindow(this);
+        InternalTitleBar.SetWindow(this);
 
         OnResize?.Invoke(options.WindowSize.Width, options.WindowSize.Height);
     }
@@ -117,10 +118,9 @@ public unsafe partial class Window : IWindow
         }
     }
 
-
     private void internalView()
     {
-        TitleBar.WindowsTitleBar();
+        InternalTitleBar.WindowsTitleBar(Color.FromArgb(30, 30, 30));
         ImGui.SetCursorPosY(GetTitleBarHeight());
         View?.Invoke();
     }
@@ -129,7 +129,7 @@ public unsafe partial class Window : IWindow
     {
         backend.Destroy();
         DestroyWindow(handle);
-        UnregisterClassW(wndclass.lpszClassName, wndclass.hInstance);
+        UnregisterClassW(wndClass.lpszClassName, wndClass.hInstance);
     }
 
 

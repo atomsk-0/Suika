@@ -7,5 +7,5 @@ public enum RenderBackend
 {
     DirectX9, // Windows only
     DirectX12, // Windows only
-    OpenGl // Cross platform
+    OpenGl // Linux and Windows
 }

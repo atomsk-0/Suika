@@ -152,13 +152,13 @@ public unsafe class D3D9Backend : IBackend
         if (result == D3DERR.D3DERR_DEVICELOST) deviceLost = true;
 
         // We don't want this to be called from timed render loop so we use track lock
-        if (TitleBar.IsDragging && TitleBar.TrackLock == false) // TODO: Improve this logic
+        if (InternalTitleBar.IsDragging && InternalTitleBar.TrackLock == false) // TODO: Improve this logic
         {
-            TitleBar.TrackLock = true;
+            InternalTitleBar.TrackLock = true;
             window.DragWindow();
             window.Activate();
             Platform.SimulateLeftMouseClick();
-            TitleBar.TrackLock = false;
+            InternalTitleBar.TrackLock = false;
         }
     }
 
