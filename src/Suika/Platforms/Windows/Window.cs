@@ -207,6 +207,12 @@ public unsafe partial class Window : IWindow
     }
 
 
+    public bool CanResize()
+    {
+        return options.AllowResize;
+    }
+
+
     public void Activate()
     {
         SetActiveWindow(handle);
@@ -297,9 +303,24 @@ public unsafe partial class Window : IWindow
             }
             case WM.WM_NCHITTEST:
             {
-                POINT point = new POINT(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
                 if (options.AllowResize)
                 {
+                    POINT point = new POINT(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+                    if (Platform.IsWindows11())
+                    {
+                        POINT point2 = new POINT(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+                        MapWindowPoints(HWND.NULL, handle, &point2, 1);
+                        RECT maximizeButtonRect = new RECT();
+                        maximizeButtonRect.left = (int)GetViewSize().X - (int)GetCaptionButtonWidth() * 2;
+                        maximizeButtonRect.top = 0;
+                        maximizeButtonRect.right = maximizeButtonRect.left + (int)GetCaptionButtonWidth();
+                        maximizeButtonRect.bottom = (int)GetTitleBarHeight();
+                        if (PtInRect(&maximizeButtonRect, point2))
+                        {
+                            return HTMAXBUTTON;
+                        }
+                    }
+
                     RECT rc;
                     GetWindowRect(handle, &rc);
                     if (point.y >= rc.top && point.y < rc.top + border_width) {
