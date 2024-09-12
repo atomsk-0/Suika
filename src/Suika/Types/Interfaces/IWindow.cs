@@ -1,6 +1,7 @@
 ﻿// Copyright (c) atomsk <baddobatsu@protonmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Drawing;
 using System.Numerics;
 using Suika.Data;
 
@@ -33,6 +34,10 @@ public interface IWindow
     public bool IsMaximized();
     public nint GetHandle();
 
+    public void AddFont(Font font);
+    public void SetTitlebarStyle(in Color backgroundColor, in Color borderColor, in float borderThickness);
+
     public Action<int, int>? OnResize { get; set; }
     public Action? View { get; set; }
+    public Action? TitlebarView { get; set; }
 }

@@ -17,7 +17,7 @@ internal static unsafe class InternalTitleBar
     internal static bool TrackLock;
     private static IWindow platformWindow = null!;
 
-    internal static void WindowsTitleBar(in Color backgroundColor)
+    internal static void WindowsTitleBar(in Color backgroundColor, in Color borderColor, float borderThickness)
     {
         ImGuiWindow* window = ImGuiInternal.GetCurrentWindow();
         if (window->SkipItems)
@@ -28,6 +28,10 @@ internal static unsafe class InternalTitleBar
         var platformTitleBarRect = platformWindow.GetTitleBarRect();
         ImRect titleBarRect = new ImRect(platformTitleBarRect.Left, platformTitleBarRect.Top, platformTitleBarRect.Right, platformTitleBarRect.Bottom);
         window->DrawList->AddRectFilled(titleBarRect.Min, titleBarRect.Max, backgroundColor.ToUint32Color());
+        if (borderThickness > 0)
+        {
+            window->DrawList->AddLine(new Vector2(titleBarRect.Min.X, titleBarRect.Max.Y), new Vector2(titleBarRect.Max.X, titleBarRect.Max.Y),borderColor.ToUint32Color(), borderThickness);
+        }
 
         uint titleBarId = window->GetID("title_bar");
         ImGui.SetNextItemAllowOverlap();
@@ -79,14 +83,6 @@ internal static unsafe class InternalTitleBar
         {
             platformWindow.Minimize();
         }
-
-        ImGui.SetCursorPos(new Vector2(50, 50));
-        ImGui.BeginGroup();
-        ImGui.Text(platformWindow.GetCaptionButtonWidth().ToString());
-        ImGui.Text(platformWindow.GetTitleBarHeight().ToString());
-        ImGui.Text(platformWindow.GetTitleBarPadding().ToString());
-        ImGui.Text(platformWindow.GetTitleBarTopOffset().ToString());
-        ImGui.EndGroup();
     }
 
 

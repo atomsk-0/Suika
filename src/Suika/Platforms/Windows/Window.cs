@@ -22,6 +22,8 @@ public unsafe partial class Window : IWindow
     [LibraryImport("Mochi.DearImGui.Native.dll")]
     private static partial LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam);
 
+    private readonly List<Font> fonts = [];
+
     private const string class_name = "Suika::Window";
     private const byte loop_timer_id = 1;
     private const byte border_width = 8;
@@ -34,6 +36,10 @@ public unsafe partial class Window : IWindow
 
     private bool running = true;
     private bool hoveringLayoutRect;
+
+    private Color titleBarBackgroundColor;
+    private Color titleBarBorderColor;
+    private float titleBarBorderThickness;
 
     private delegate LRESULT WndProcDelegate(HWND window, uint msg, WPARAM wParam, LPARAM lParam);
     private WndProcDelegate wndProcDelegate = null!;
@@ -98,6 +104,7 @@ public unsafe partial class Window : IWindow
         UpdateWindow(handle);
 
         Platform.SetWindowStyle(handle, options);
+        loadUserFonts();
         InternalTitleBar.SetWindow(this);
 
         OnResize?.Invoke(options.WindowSize.Width, options.WindowSize.Height);
@@ -122,7 +129,9 @@ public unsafe partial class Window : IWindow
 
     private void internalView()
     {
-        InternalTitleBar.WindowsTitleBar(Color.FromArgb(30, 30, 30));
+        InternalTitleBar.WindowsTitleBar(titleBarBackgroundColor, titleBarBorderColor, titleBarBorderThickness);
+        ImGui.SetCursorPos(new Vector2(0, IsMaximized() ? 6 : 0));
+        TitlebarView?.Invoke();
         ImGui.SetCursorPosY(GetTitleBarHeight());
         View?.Invoke();
     }
@@ -254,8 +263,25 @@ public unsafe partial class Window : IWindow
         return handle;
     }
 
+
+    public void AddFont(Font font)
+    {
+        fonts.Add(font);
+    }
+
+
+    public void SetTitlebarStyle(in Color backgroundColor, in Color borderColor, in float borderThickness)
+    {
+        titleBarBackgroundColor = backgroundColor;
+        titleBarBorderColor = borderColor;
+        titleBarBorderThickness = borderThickness;
+    }
+
+
     public Action<int, int>? OnResize { get; set; }
     public Action? View { get; set; }
+
+    public Action? TitlebarView { get; set; }
 
 
     private LRESULT winProc(HWND window, uint msg, WPARAM wParam, LPARAM lParam)
@@ -394,5 +420,15 @@ public unsafe partial class Window : IWindow
             }
         }
         return DefWindowProcW(window, msg, wParam, lParam);
+    }
+
+    private void loadUserFonts()
+    {
+        ImGuiIO* io = ImGui.GetIO();
+        for (int i = 0; i < fonts.Count; i++)
+        {
+            var font = fonts[i];
+            font.ImFont = io->Fonts->AddFontFromFileTTF(font.Path, font.Size);
+        }
     }
 }
