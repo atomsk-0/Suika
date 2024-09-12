@@ -48,12 +48,18 @@ internal static unsafe class InternalTitleBar
             IsDragging = false;
         }
 
-        ImGui.SetCursorPos(new Vector2(window->Size.X - platformWindow.GetCaptionButtonWidth(), 0));
+        float captionButtonWidth = platformWindow.GetCaptionButtonWidth();
+        if (platformWindow.IsMaximized())
+        {
+            captionButtonWidth += Platform.MX_PADDING;
+        }
+
+        ImGui.SetCursorPos(new Vector2(window->Size.X - captionButtonWidth, 0));
         if (windowsTitlebarButton(Platform.CLOSE_ICON))
         {
             platformWindow.Close();
         }
-        ImGui.SetCursorPos(new Vector2(window->Size.X - platformWindow.GetCaptionButtonWidth() * 2, 0));
+        ImGui.SetCursorPos(new Vector2(window->Size.X - captionButtonWidth * 2, 0));
         if (platformWindow.IsMaximized())
         {
             if (windowsTitlebarButton(Platform.RESTORE_ICON, !platformWindow.CanResize()))
@@ -68,11 +74,19 @@ internal static unsafe class InternalTitleBar
                 platformWindow.Maximize();
             }
         }
-        ImGui.SetCursorPos(new Vector2(window->Size.X - platformWindow.GetCaptionButtonWidth() * 3, 0));
+        ImGui.SetCursorPos(new Vector2(window->Size.X - captionButtonWidth * 3, 0));
         if (windowsTitlebarButton(Platform.MINIMIZE_ICON))
         {
             platformWindow.Minimize();
         }
+
+        ImGui.SetCursorPos(new Vector2(50, 50));
+        ImGui.BeginGroup();
+        ImGui.Text(platformWindow.GetCaptionButtonWidth().ToString());
+        ImGui.Text(platformWindow.GetTitleBarHeight().ToString());
+        ImGui.Text(platformWindow.GetTitleBarPadding().ToString());
+        ImGui.Text(platformWindow.GetTitleBarTopOffset().ToString());
+        ImGui.EndGroup();
     }
 
 
@@ -102,11 +116,11 @@ internal static unsafe class InternalTitleBar
         if (hovered)
         {
             window->DrawList->AddRectFilled(rect.Min, rect.Max, icon == Platforms.Windows.Platform.CLOSE_ICON ? Color.FromArgb(196, 43, 28).ToUint32Color() : Color.White.ToUint32Color(25));
-            window->DrawList->AddText(Platforms.Windows.Platform.SystemFont, 10f, rect.Min + new Vector2(13f, 12f), Color.White.ToUint32Color(), icon);
+            window->DrawList->AddText(Platforms.Windows.Platform.SystemFont, 10f, rect.Min + new Vector2((platformWindow.GetCaptionButtonWidth() - 10) / 2, (platformWindow.GetTitleBarHeight() - (platformWindow.IsMaximized() ? 0 :  10f)) / 2), Color.White.ToUint32Color(), icon);
         }
         else
         {
-            window->DrawList->AddText(Platforms.Windows.Platform.SystemFont, 10f, rect.Min + new Vector2(13f, 12f), disabled ? Color.White.ToUint32Color(125) : Color.White.ToUint32Color(), icon);
+            window->DrawList->AddText(Platforms.Windows.Platform.SystemFont, 10f, rect.Min + new Vector2((platformWindow.GetCaptionButtonWidth() - 10) / 2, (platformWindow.GetTitleBarHeight() - (platformWindow.IsMaximized() ? 0 :  10f)) / 2), disabled ? Color.White.ToUint32Color(125) : Color.White.ToUint32Color(), icon);
         }
 
         return pressed;

@@ -22,6 +22,7 @@ internal static unsafe class Platform
     internal const string MAXIMIZE_ICON = "\uE922";
     internal const string RESTORE_ICON = "\uE923";
     internal const string CLOSE_ICON = "\uE8BB";
+    internal const byte MX_PADDING = 8;
 
     internal static ImFont* SystemFont;
 

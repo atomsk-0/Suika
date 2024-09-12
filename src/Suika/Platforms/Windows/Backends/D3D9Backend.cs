@@ -25,6 +25,7 @@ public unsafe class D3D9Backend : IBackend
 
     private bool deviceLost;
     private bool imGuiInitialized;
+    private bool didSetPadding;
 
     private IWindow window = null!;
     private AppOptions options;
@@ -130,9 +131,19 @@ public unsafe class D3D9Backend : IBackend
         ImGui.NewFrame();
         ImGui.SetNextWindowPos(Vector2.Zero, ImGuiCond.Once, Vector2.Zero);
         ImGui.SetNextWindowSize(imguiWindowSize, ImGuiCond.Always);
+        if (window.IsMaximized())
+        {
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(Platform.MX_PADDING * 2, 0));
+            didSetPadding = true;
+        }
         ImGui.Begin("suika_imgui_window", null, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration);
         renderAction?.Invoke();
         ImGui.End();
+        if (didSetPadding)
+        {
+            ImGui.PopStyleVar();
+            didSetPadding = false;
+        }
         ImGui.EndFrame();
 
 
