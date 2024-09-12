@@ -33,6 +33,7 @@ public unsafe partial class Window : IWindow
     private IBackend backend = null!;
 
     private bool running = true;
+    private bool hoveringLayoutRect;
 
     private delegate LRESULT WndProcDelegate(HWND window, uint msg, WPARAM wParam, LPARAM lParam);
     private WndProcDelegate wndProcDelegate = null!;
@@ -116,6 +117,7 @@ public unsafe partial class Window : IWindow
             if (running == false) break;
             backend.Render(internalViewAction);
         }
+        Destroy();
     }
 
     private void internalView()
@@ -125,11 +127,25 @@ public unsafe partial class Window : IWindow
         View?.Invoke();
     }
 
+
+    public void Close()
+    {
+        PostMessageW(handle, WM.WM_CLOSE, 0, 0);
+    }
+
     public void Destroy()
     {
         backend.Destroy();
         DestroyWindow(handle);
         UnregisterClassW(wndClass.lpszClassName, wndClass.hInstance);
+        /*new Thread(() =>
+        {
+            running = false;
+            while (renderLock) { } // Wait for render to finish
+            backend.Destroy();
+            DestroyWindow(handle);
+            UnregisterClassW(wndClass.lpszClassName, wndClass.hInstance);
+        }).Start();*/
     }
 
 
@@ -230,9 +246,8 @@ public unsafe partial class Window : IWindow
 
     public bool IsMaximized()
     {
-        return false; // TODO: Implement
+        return IsZoomed(handle);
     }
-
 
     public nint GetHandle()
     {
@@ -301,12 +316,30 @@ public unsafe partial class Window : IWindow
                 }
                 return 0;
             }
+            case WM.WM_NCLBUTTONDOWN:
+            {
+                // If we returned HTMAXBUTTON in WM_NCHITTEST, we need to handle the maximize button click ourselves
+                // This is because the default behavior will block mouse input to the window itself and will render old classic maximize button to be clicked... why windows
+                if (hoveringLayoutRect)
+                {
+                    if (IsMaximized())
+                    {
+                        Restore();
+                    }
+                    else
+                    {
+                        Maximize();
+                    }
+                    return 0;
+                }
+                break;
+            }
             case WM.WM_NCHITTEST:
             {
                 if (options.AllowResize)
                 {
                     POINT point = new POINT(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-                    if (Platform.IsWindows11())
+                    if (Platform.IsWindows11() && options.AllowResize)
                     {
                         POINT point2 = new POINT(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
                         MapWindowPoints(HWND.NULL, handle, &point2, 1);
@@ -317,8 +350,10 @@ public unsafe partial class Window : IWindow
                         maximizeButtonRect.bottom = (int)GetTitleBarHeight();
                         if (PtInRect(&maximizeButtonRect, point2))
                         {
+                            hoveringLayoutRect = true;
                             return HTMAXBUTTON;
                         }
+                        hoveringLayoutRect = false;
                     }
 
                     RECT rc;

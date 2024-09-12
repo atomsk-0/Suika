@@ -51,7 +51,7 @@ internal static unsafe class InternalTitleBar
         ImGui.SetCursorPos(new Vector2(window->Size.X - platformWindow.GetCaptionButtonWidth(), 0));
         if (windowsTitlebarButton(Platform.CLOSE_ICON))
         {
-
+            platformWindow.Close();
         }
         ImGui.SetCursorPos(new Vector2(window->Size.X - platformWindow.GetCaptionButtonWidth() * 2, 0));
         if (platformWindow.IsMaximized())

@@ -12,6 +12,7 @@ public interface IWindow
     public void Render();
     public void Destroy();
 
+    public void Close();
     public void Maximize();
     public void Restore();
     public void Minimize();
