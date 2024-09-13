@@ -17,8 +17,7 @@ internal static unsafe class Program
 {
     private static readonly Font mainFont = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Inter-Medium.ttf"), 16f);
     private static readonly Font iconFont = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fa-regular-400.ttf"), 15f);
-    private static Texture testTexture;
-
+    private static bool test;
     private static Application app;
 
     public static void Main()
@@ -33,7 +32,6 @@ internal static unsafe class Program
         app.SetTitlebarView(titlebarView);
         app.SetView(renderView);
         app.CreateWindow();
-        testTexture = app.LoadTextureFromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "test.png"));
         app.Run();
     }
 
@@ -47,10 +45,51 @@ internal static unsafe class Program
 
     private static void renderView()
     {
+        Spacer.Vertical(20);
+        Checkbox.Normal(id: "test_cb", size: mainFont.Size, font: mainFont, label: "Hello World", state: ref test,
+            uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
+            uncheckedTextColor: Color.FromArgb(200, 200, 200),
+            uncheckedBorderColor: Color.FromArgb(61, 61, 61),
+            hoveredBackgroundColor: Color.FromArgb(40, 40, 40),
+            hoveredTextColor: Color.FromArgb(200, 200, 200),
+            hoveredBorderColor: Color.FromArgb(71, 71, 71),
+            checkedBackgroundColor: Color.White,
+            checkedTextColor: Color.White,
+            checkedMarkColor: Color.Black,
+            rounding: 2f);
+        /*Checkbox.Normal(id: "test_cb1", size: mainFont.Size, font: mainFont, label: "Hello World 3", state: ref test,
+            uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
+            uncheckedTextColor: Color.FromArgb(200, 200, 200),
+            uncheckedBorderColor: Color.FromArgb(61, 61, 61),
+            hoveredBackgroundColor: Color.FromArgb(40, 40, 40),
+            hoveredTextColor: Color.FromArgb(200, 200, 200),
+            hoveredBorderColor: Color.FromArgb(71, 71, 71),
+            rounding: 2f);
+        Checkbox.Normal(id: "test_cb2", size: mainFont.Size, font: mainFont, label: "Hello World 4", state: ref test,
+            uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
+            uncheckedTextColor: Color.FromArgb(200, 200, 200),
+            uncheckedBorderColor: Color.FromArgb(61, 61, 61),
+            hoveredBackgroundColor: Color.FromArgb(40, 40, 40),
+            hoveredTextColor: Color.FromArgb(200, 200, 200),
+            hoveredBorderColor: Color.FromArgb(71, 71, 71),
+            rounding: 2f);
+        Checkbox.Normal(id: "test_cb3", size: mainFont.Size, font: mainFont, label: "Hello World 5", state: ref test,
+            uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
+            uncheckedTextColor: Color.FromArgb(200, 200, 200),
+            uncheckedBorderColor: Color.FromArgb(61, 61, 61),
+            hoveredBackgroundColor: Color.FromArgb(40, 40, 40),
+            hoveredTextColor: Color.FromArgb(200, 200, 200),
+            hoveredBorderColor: Color.FromArgb(71, 71, 71),
+            rounding: 2f);
         Spacer.Vertical(8f);
-        Text.Normal("Normal text", mainFont, Color.White);
+        ImGui.Text($"HELLO WORLD: {DateTime.UtcNow.ToLongTimeString()}");
+        ImGui.PushFont(mainFont.ImFont);
         Spacer.Vertical(8f);
-        Button.Normal(label: "Normal Button",
+        ImGui.Text($"HELLO WORLD: {DateTime.UtcNow.ToLongTimeString()}");
+        ImGui.PopFont();
+        ImGui.Text($"HELLO WORLD: {DateTime.UtcNow.ToLongTimeString()}");
+        Spacer.Vertical(25f);
+        Button.Normal(label: "Hello World",
             id: "test1",
             font: mainFont,
             backgroundColor: Color.FromArgb(30, 30, 30),
@@ -62,7 +101,7 @@ internal static unsafe class Program
             padding: new Vector2(3, 3),
             radius: 3f);
         Spacer.Vertical(10f);
-        Button.WithIcon(label: "Icon Button with text",
+        Button.WithIcon(label: "Hello World",
             id: "test2",
             icon: "\u002b",
             iconFont: iconFont,
@@ -78,7 +117,7 @@ internal static unsafe class Program
             radius: 3f);
         Spacer.SameLine(10f);
         Button.WithIcon(label: "",
-            id: "icon_button",
+            id: "test3",
             icon: "\u002b",
             iconFont: iconFont,
             labelFont: mainFont,
@@ -90,8 +129,6 @@ internal static unsafe class Program
             borderThickness: 1f,
             borderColor: Color.FromArgb(50, 50, 50),
             padding: new Vector2(3, 3),
-            radius: 3f);
-
-        ImGui.Image((void*)testTexture.Handle, new Vector2(testTexture.Width, testTexture.Height), Vector2.Zero, Vector2.One, Vector4.One, Vector4.Zero);
+            radius: 3f);*/
     }
 }
