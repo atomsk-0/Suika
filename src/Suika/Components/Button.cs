@@ -13,6 +13,11 @@ namespace Suika.Components;
 
 public static unsafe class Button
 {
+    public static bool Normal(string id, string label, in ButtonNormalStyle style, bool disabled = false)
+    {
+        return Normal(id, label, style.Font, style.BackgroundColor, style.TextColor, style.BorderThickness, style.BorderColor, style.Radius, style.Padding, disabled, style.HoverBackgroundColor, style.HoverTextColor, style.HoverBorderColor, style.DisabledBorderColor, style.DisabledBackgroundColor, style.DisabledTextColor);
+    }
+
     public static bool Normal(string id, string label, Font font, Color backgroundColor, Color textColor, float borderThickness = 0f,
         Color borderColor = default, float radius = 0f, Vector2 padding = default, bool disabled = false,
         Color hoverBackgroundColor = default, Color hoverTextColor = default, Color hoverBorderColor = default, Color disabledBorderColor = default, Color disabledBackgroundColor = default, Color disabledTextColor = default)
@@ -53,6 +58,11 @@ public static unsafe class Button
         window->DrawList->AddText(font.ImFont, font.Size, textPosition, hovered ? hoverTextColor.ToUint32Color() : textColor.ToUint32Color(), label);
 
         return pressed;
+    }
+
+    public static bool WithIcon(string id, string label, string icon, in ButtonWithIconStyle style, bool disabled = false)
+    {
+        return WithIcon(id, label, style.LabelFont, icon, style.IconFont, style.BackgroundColor, style.TextColor, style.SpaceBetween, style.BorderThickness, style.BorderColor, style.Radius, style.Padding, disabled, style.HoverBackgroundColor, style.HoverTextColor, style.HoverBorderColor, style.DisabledBorderColor, style.DisabledBackgroundColor, style.DisabledTextColor);
     }
 
     public static bool WithIcon(string id, string label, Font labelFont, string icon, Font iconFont,  Color backgroundColor, Color textColor, float spaceBetween = 2f, float borderThickness = 0f,
@@ -105,4 +115,40 @@ public static unsafe class Button
 
         return pressed;
     }
+}
+
+public struct ButtonNormalStyle
+{
+    public Font Font { get; set; }
+    public Color BackgroundColor { get; set; }
+    public Color TextColor { get; set; }
+    public float BorderThickness { get; set; }
+    public Color BorderColor { get; set; }
+    public float Radius { get; set; }
+    public Vector2 Padding { get; set; }
+    public Color HoverBackgroundColor { get; set; }
+    public Color HoverTextColor { get; set; }
+    public Color HoverBorderColor { get; set; }
+    public Color DisabledBorderColor { get; set; }
+    public Color DisabledBackgroundColor { get; set; }
+    public Color DisabledTextColor { get; set; }
+}
+
+public struct ButtonWithIconStyle
+{
+    public Font LabelFont { get; set; }
+    public Font IconFont { get; set; }
+    public Color BackgroundColor { get; set; }
+    public Color TextColor { get; set; }
+    public float SpaceBetween { get; set; }
+    public float BorderThickness { get; set; }
+    public Color BorderColor { get; set; }
+    public float Radius { get; set; }
+    public Vector2 Padding { get; set; }
+    public Color HoverBackgroundColor { get; set; }
+    public Color HoverTextColor { get; set; }
+    public Color HoverBorderColor { get; set; }
+    public Color DisabledBorderColor { get; set; }
+    public Color DisabledBackgroundColor { get; set; }
+    public Color DisabledTextColor { get; set; }
 }

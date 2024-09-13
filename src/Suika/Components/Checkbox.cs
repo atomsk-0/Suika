@@ -12,6 +12,11 @@ namespace Suika.Components;
 
 public static unsafe class Checkbox
 {
+    public static bool Normal(string id, string label, ref bool state, in CheckboxNormalStyle style)
+    {
+        return Normal(id,style.Font,  label, ref state, style.Size, style.Rounding, style.UncheckedBackgroundColor, style.UncheckedBorderColor, style.UncheckedTextColor, style.CheckedBackgroundColor, style.CheckedBorderColor, style.CheckedMarkColor, style.CheckedTextColor, style.HoveredBackgroundColor, style.HoveredBorderColor, style.HoveredTextColor, style.DisabledBackgroundColor, style.DisabledBorderColor, style.DisabledMarkColor, style.DisabledTextColor, style.Disabled);
+    }
+
     public static bool Normal(string id, Font font, string label, ref bool state, float size = 10, float rounding = 0,
         Color uncheckedBackgroundColor = default, Color uncheckedBorderColor = default,
         Color uncheckedTextColor = default, Color checkedBackgroundColor = default,
@@ -98,4 +103,26 @@ public static unsafe class Checkbox
 
         return pressed;
     }
+}
+
+public struct CheckboxNormalStyle
+{
+    public Font Font { get; set; }
+    public float Size { get; set; }
+    public float Rounding { get; set; }
+    public Color UncheckedBackgroundColor { get; set; }
+    public Color UncheckedBorderColor { get; set; }
+    public Color UncheckedTextColor { get; set; }
+    public Color CheckedBackgroundColor { get; set; }
+    public Color CheckedBorderColor { get; set; }
+    public Color CheckedMarkColor { get; set; }
+    public Color CheckedTextColor { get; set; }
+    public Color HoveredBackgroundColor { get; set; }
+    public Color HoveredBorderColor { get; set; }
+    public Color HoveredTextColor { get; set; }
+    public Color DisabledBackgroundColor { get; set; }
+    public Color DisabledBorderColor { get; set; }
+    public Color DisabledMarkColor { get; set; }
+    public Color DisabledTextColor { get; set; }
+    public bool Disabled { get; set; }
 }
