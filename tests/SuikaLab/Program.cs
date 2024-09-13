@@ -57,6 +57,7 @@ internal static unsafe class Program
             checkedTextColor: Color.White,
             checkedMarkColor: Color.Black,
             rounding: 2f);
+        Spacer.Line(Color.White, 1f, 5f, 5f);
         /*Checkbox.Normal(id: "test_cb1", size: mainFont.Size, font: mainFont, label: "Hello World 3", state: ref test,
             uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
             uncheckedTextColor: Color.FromArgb(200, 200, 200),
