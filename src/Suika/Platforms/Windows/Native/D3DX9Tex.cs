@@ -11,4 +11,7 @@ namespace Suika.Platforms.Windows.Native;
 internal static unsafe partial class D3DX9Tex
 {
     private const string library = "d3dx9_43.dll";
+
+    [LibraryImport(library)]
+    internal static partial HRESULT D3DXCreateTextureFromFileA(IDirect3DDevice9* pDevice, [MarshalAs(UnmanagedType.LPStr)] string pSrcFile, IDirect3DTexture9** ppTexture);
 }

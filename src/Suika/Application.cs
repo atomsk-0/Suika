@@ -49,6 +49,11 @@ public class Application
         AddFont(new Font(path, size));
     }
 
+    public Texture LoadTextureFromFile(string path)
+    {
+        return window.GetBackend().LoadTextureFromFile(path);
+    }
+
     public Vector2 GetViewSize()
     {
         return window.GetViewSize();
@@ -64,9 +69,13 @@ public class Application
         window.View = view;
     }
 
-    public void Run()
+    public void CreateWindow()
     {
         window.Create(appOptions);
+    }
+
+    public void Run()
+    {
         window.Render();
         window.Destroy();
     }

@@ -5,7 +5,7 @@ using Suika.Data;
 
 namespace Suika.Types.Interfaces;
 
-public interface IBackend
+public unsafe interface IBackend
 {
     public bool Setup(IWindow windowInstance, in AppOptions appOptions);
     public void Reset();
@@ -13,6 +13,6 @@ public interface IBackend
 
     public void Render(Action? renderAction);
 
-    public nint LoadTextureFromFile(string path);
-    public nint LoadTextureFromMemory(Stream stream);
+    public Texture LoadTextureFromFile(string path);
+    public Texture LoadTextureFromMemory(Stream stream);
 }

@@ -384,13 +384,13 @@ public unsafe partial class D3D12Backend : IBackend
     }
 
 
-    public IntPtr LoadTextureFromFile(string path)
+    public Texture LoadTextureFromFile(string path)
     {
         throw new NotImplementedException();
     }
 
 
-    public IntPtr LoadTextureFromMemory(Stream stream)
+    public Texture LoadTextureFromMemory(Stream stream)
     {
         throw new NotImplementedException();
     }

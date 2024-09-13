@@ -7,6 +7,7 @@ using Mochi.DearImGui.Backends.Direct3D9;
 using Mochi.DearImGui.Backends.Win32;
 using Suika.Components.Internal;
 using Suika.Data;
+using Suika.Platforms.Windows.Native;
 using Suika.Types.Interfaces;
 using TerraFX.Interop.DirectX;
 using TerraFX.Interop.Windows;
@@ -175,12 +176,19 @@ public unsafe class D3D9Backend : IBackend
     }
 
 
-    public nint LoadTextureFromFile(string path)
+    public Texture LoadTextureFromFile(string path)
     {
-        throw new NotImplementedException();
+        IDirect3DTexture9* texture;
+        HRESULT hresult = D3DX9Tex.D3DXCreateTextureFromFileA(device, path, &texture);
+        if (hresult != S.S_OK) return new Texture(0, 0, 0);
+
+        D3DSURFACE_DESC desc;
+        texture->GetLevelDesc(0, &desc);
+
+        return new Texture((nint)texture, desc.Width, desc.Height);
     }
 
-    public nint LoadTextureFromMemory(Stream stream)
+    public Texture LoadTextureFromMemory(Stream stream)
     {
         throw new NotImplementedException();
     }

@@ -278,6 +278,12 @@ public unsafe partial class Window : IWindow
     }
 
 
+    public IBackend GetBackend()
+    {
+        return backend;
+    }
+
+
     public Action<int, int>? OnResize { get; set; }
     public Action? View { get; set; }
 

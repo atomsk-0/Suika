@@ -36,6 +36,7 @@ public interface IWindow
 
     public void AddFont(Font font);
     public void SetTitlebarStyle(in Color backgroundColor, in Color borderColor, in float borderThickness);
+    public IBackend GetBackend();
 
     public Action<int, int>? OnResize { get; set; }
     public Action? View { get; set; }

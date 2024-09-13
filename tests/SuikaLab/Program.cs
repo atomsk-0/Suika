@@ -17,6 +17,7 @@ internal static unsafe class Program
 {
     private static readonly Font mainFont = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Inter-Medium.ttf"), 16f);
     private static readonly Font iconFont = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fa-regular-400.ttf"), 15f);
+    private static Texture testTexture;
 
     private static Application app;
 
@@ -31,6 +32,8 @@ internal static unsafe class Program
         app.SetTitlebarStyle(Color.FromArgb(30, 30, 30), Color.FromArgb(50, 50, 50), 1f);
         app.SetTitlebarView(titlebarView);
         app.SetView(renderView);
+        app.CreateWindow();
+        testTexture = app.LoadTextureFromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "test.png"));
         app.Run();
     }
 
@@ -88,5 +91,7 @@ internal static unsafe class Program
             borderColor: Color.FromArgb(50, 50, 50),
             padding: new Vector2(3, 3),
             radius: 3f);
+
+        ImGui.Image((void*)testTexture.Handle, new Vector2(testTexture.Width, testTexture.Height), Vector2.Zero, Vector2.One, Vector4.One, Vector4.Zero);
     }
 }

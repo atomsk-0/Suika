@@ -12,6 +12,7 @@ using Suika.Data;
 using Suika.Types.Interfaces;
 using TerraFX.Interop.Windows;
 using GL = Silk.NET.OpenGL.GL;
+using Texture = Suika.Data.Texture;
 using WGL = Silk.NET.WGL.WGL;
 
 #pragma warning disable CA1416
@@ -126,16 +127,17 @@ public unsafe class Win32OpenGl : IBackend
     }
 
 
-    public IntPtr LoadTextureFromFile(string path)
+    public Texture LoadTextureFromFile(string path)
     {
         throw new NotImplementedException();
     }
 
 
-    public IntPtr LoadTextureFromMemory(Stream stream)
+    public Texture LoadTextureFromMemory(Stream stream)
     {
         throw new NotImplementedException();
     }
+
 
     private void onWindowResize(int width, int height)
     {
