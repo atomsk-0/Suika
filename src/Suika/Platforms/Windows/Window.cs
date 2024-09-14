@@ -130,9 +130,9 @@ public unsafe partial class Window : IWindow
     private void internalView()
     {
         InternalTitleBar.WindowsTitleBar(titleBarBackgroundColor, titleBarBorderColor, titleBarBorderThickness);
-        ImGui.SetCursorPos(new Vector2(0, (IsMaximized() ? 6 : 0) + titleBarBorderThickness));
+        ImGui.SetCursorPos(new Vector2(0, IsMaximized() ? 6 : 0));
         TitlebarView?.Invoke();
-        ImGui.SetCursorPosY(GetTitleBarHeight());
+        ImGui.SetCursorPosY(GetTitleBarHeight() + titleBarBorderThickness);
         View?.Invoke();
     }
 
