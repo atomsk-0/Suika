@@ -78,7 +78,7 @@ public static unsafe class Button
         uint uid = window->GetID(id);
         Vector2 position = window->DC.CursorPos;
         ImGui.PushFont(labelFont.ImFont);
-        var labelSize = ImGui.CalcTextSize(label, true);
+        var labelSize = string.IsNullOrEmpty(label) ? Vector2.Zero : ImGui.CalcTextSize(label, true);
         ImGui.PopFont();
         ImGui.PushFont(iconFont.ImFont);
         var iconSize = ImGui.CalcTextSize(icon, true);
@@ -86,7 +86,10 @@ public static unsafe class Button
 
         Vector2 size = iconSize + labelSize + new Vector2(padding.X * 2, padding.Y * 2);
         size.X += spaceBetween;
-        size.Y -= iconSize.Y;
+        if (string.IsNullOrEmpty(label) == false)
+        {
+            size.Y -= iconSize.Y;
+        }
 
 
         ImRect rect = new ImRect(position, position + size);
@@ -111,7 +114,10 @@ public static unsafe class Button
         Vector2 textPosition = new Vector2(iconPosition.X + iconSize.X + spaceBetween, position.Y + padding.Y);
 
         window->DrawList->AddText(iconFont.ImFont, iconFont.Size, iconPosition, hovered ? hoverTextColor.ToUint32Color() : textColor.ToUint32Color(), icon);
-        window->DrawList->AddText(labelFont.ImFont, labelFont.Size, textPosition, hovered ? hoverTextColor.ToUint32Color() : textColor.ToUint32Color(), label);
+        if (string.IsNullOrEmpty(label) == false)
+        {
+            window->DrawList->AddText(labelFont.ImFont, labelFont.Size, textPosition, hovered ? hoverTextColor.ToUint32Color() : textColor.ToUint32Color(), label);
+        }
 
         return pressed;
     }
