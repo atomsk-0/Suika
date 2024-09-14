@@ -13,6 +13,7 @@
       <PackageReference Include="Silk.NET.OpenGL" Version="2.21.0" />
       <PackageReference Include="Silk.NET.WGL" Version="2.21.0" />
       <PackageReference Include="Silk.NET.WGL.Extensions.EXT" Version="2.21.0" />
+      <PackageReference Include="System.Text.Json" Version="8.0.4" />
       <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100" />
     </ItemGroup>
 
