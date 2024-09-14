@@ -130,7 +130,7 @@ public unsafe partial class Window : IWindow
     private void internalView()
     {
         InternalTitleBar.WindowsTitleBar(titleBarBackgroundColor, titleBarBorderColor, titleBarBorderThickness);
-        ImGui.SetCursorPos(new Vector2(0, IsMaximized() ? 6 : 0));
+        ImGui.SetCursorPos(new Vector2(0, (IsMaximized() ? 6 : 0) + titleBarBorderThickness));
         TitlebarView?.Invoke();
         ImGui.SetCursorPosY(GetTitleBarHeight());
         View?.Invoke();
@@ -147,14 +147,6 @@ public unsafe partial class Window : IWindow
         backend.Destroy();
         DestroyWindow(handle);
         UnregisterClassW(wndClass.lpszClassName, wndClass.hInstance);
-        /*new Thread(() =>
-        {
-            running = false;
-            while (renderLock) { } // Wait for render to finish
-            backend.Destroy();
-            DestroyWindow(handle);
-            UnregisterClassW(wndClass.lpszClassName, wndClass.hInstance);
-        }).Start();*/
     }
 
 
