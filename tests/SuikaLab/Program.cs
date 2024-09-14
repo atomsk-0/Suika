@@ -46,7 +46,11 @@ internal static unsafe class Program
     private static void renderView()
     {
         Spacer.Vertical(20);
-        Checkbox.Normal(id: "test_cb", size: mainFont.Size, font: mainFont, label: "Hello World", state: ref test,
+        Child.Normal("test_child", new Vector2(200, 200), () =>
+        {
+
+        }, backgroundColor: Color.FromArgb(30, 30, 30), borderColor: Color.FromArgb(60, 60, 60), borderThickness: 1f, rounding: 2f);
+        /*Checkbox.Normal(id: "test_cb", size: mainFont.Size, font: mainFont, label: "Hello World", state: ref test,
             uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
             uncheckedTextColor: Color.FromArgb(200, 200, 200),
             uncheckedBorderColor: Color.FromArgb(61, 61, 61),
