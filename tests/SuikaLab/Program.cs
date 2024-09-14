@@ -17,7 +17,7 @@ internal static unsafe class Program
 {
     private static readonly Font mainFont = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Inter-Medium.ttf"), 16f);
     private static readonly Font iconFont = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fa-regular-400.ttf"), 15f);
-    private static bool test;
+    private static string testInput = "Hello World!";
     private static Application app;
 
     public static void Main()
@@ -48,8 +48,10 @@ internal static unsafe class Program
         Spacer.Vertical(20);
         Child.Normal("test_child", new Vector2(200, 200), () =>
         {
-
-        }, backgroundColor: Color.FromArgb(30, 30, 30), borderColor: Color.FromArgb(60, 60, 60), borderThickness: 1f, rounding: 2f);
+            TextInput.Normal(label: "Hello World", labelFont: mainFont, inputFont: mainFont, text: ref testInput,
+                maxLength: 600, hint: "Test Hint", textColor: Color.White, backgroundColor: Color.FromArgb(10, 10, 10), borderColor: Color.FromArgb(20, 20, 20),
+                borderThickness: 1f, rounding: 3f, labelColor: Color.White, showLabel: true, padding: new Vector2(5, 5));
+        }, backgroundColor: Color.FromArgb(30, 30, 30), borderColor: Color.FromArgb(60, 60, 60), borderThickness: 1f, rounding: 6f);
         /*Checkbox.Normal(id: "test_cb", size: mainFont.Size, font: mainFont, label: "Hello World", state: ref test,
             uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
             uncheckedTextColor: Color.FromArgb(200, 200, 200),
