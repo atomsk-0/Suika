@@ -426,6 +426,21 @@ public unsafe partial class Window : IWindow
         for (int i = 0; i < fonts.Count; i++)
         {
             var font = fonts[i];
+            if (font is { RangeStart: not null, RangeEnd: not null })
+            {
+                char[] iconRanges = [font.RangeStart.Value, font.RangeEnd.Value, '\0'];
+                var iconsConfig = new ImFontConfig
+                {
+                    MergeMode = false,
+                    PixelSnapH = true,
+                    GlyphMinAdvanceX = font.GlyphMinAdvanceX
+                };
+                fixed (char* iconRangesPtr = iconRanges)
+                {
+                    font.ImFont = io->Fonts->AddFontFromFileTTF(font.Path, font.Size, &iconsConfig, iconRangesPtr);
+                }
+                continue;
+            }
             font.ImFont = io->Fonts->AddFontFromFileTTF(font.Path, font.Size);
         }
     }
