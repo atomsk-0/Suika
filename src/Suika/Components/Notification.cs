@@ -61,6 +61,16 @@ public static unsafe class Notification
         }
     }
 
+    /// <summary>
+    /// This should be called before any notifications are shown. (preferably when you make new Application instance)
+    /// </summary>
+    /// <param name="padding"></param>
+    /// <param name="backgroundColor"></param>
+    /// <param name="textColor"></param>
+    /// <param name="borderColor"></param>
+    /// <param name="borderThickness"></param>
+    /// <param name="rounding"></param>
+    /// <param name="font"></param>
     public static void SetStyle(Vector2 padding, Color backgroundColor, Color textColor, Color borderColor, float borderThickness, float rounding, Font font)
     {
         Notification.padding = padding;

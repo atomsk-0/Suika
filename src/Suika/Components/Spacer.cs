@@ -21,9 +21,21 @@ public static unsafe class Spacer
         ImGui.Dummy(new Vector2(0, height));
     }
 
-    public static void SameLine(float spacing = 0)
+    public static void SameLine(float spacing = 0, float offset = 0)
     {
-        ImGui.SameLine(0f, spacing);
+        var g = *ImGuiInternal.GImGui;
+        ImGuiWindow* window = ImGuiInternal.GetCurrentWindow();
+        if (window->SkipItems) return;
+
+        if (spacing < 0)
+            spacing = g->Style.ItemSpacing.X;
+
+        window->DC.CursorPos.X = window->DC.CursorPosPrevLine.X + spacing;
+        window->DC.CursorPos.Y = window->DC.CursorPosPrevLine.Y - offset;
+
+        window->DC.CurrLineSize = window->DC.PrevLineSize;
+        window->DC.CurrLineTextBaseOffset = window->DC.PrevLineTextBaseOffset;
+        window->DC.IsSameLine = true;
     }
 
     public static void Both(float width, float height)
