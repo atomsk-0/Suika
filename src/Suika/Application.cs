@@ -10,7 +10,7 @@ namespace Suika;
 
 public class Application
 {
-    private readonly IWindow window;
+    public readonly IWindow Window;
     private readonly AppOptions appOptions;
 
     public Application(in AppOptions appOptions)
@@ -18,7 +18,7 @@ public class Application
         this.appOptions = appOptions;
         if (OperatingSystem.IsWindows())
         {
-            window = new Platforms.Windows.Window();
+            Window = new Platforms.Windows.Window();
         }
         else
         {
@@ -28,12 +28,12 @@ public class Application
 
     public void SetTitlebarStyle(in Color backgroundColor, in Color borderColor, float borderThickness)
     {
-        window.SetTitlebarStyle(backgroundColor, borderColor, borderThickness);
+        Window.SetTitlebarStyle(backgroundColor, borderColor, borderThickness);
     }
 
     public void AddFont(Font font)
     {
-        window.AddFont(font);
+        Window.AddFont(font);
     }
 
     public void AddFonts(params Font[] fonts)
@@ -51,32 +51,34 @@ public class Application
 
     public Texture LoadTextureFromFile(string path)
     {
-        return window.GetBackend().LoadTextureFromFile(path);
+        return Window.GetBackend().LoadTextureFromFile(path);
     }
 
-    public Vector2 GetViewSize()
+    public Vector2 GetTitlebarWorkArea()
     {
-        return window.GetViewSize();
+        var titleBarRect = Window.GetTitleBarRect();
+        titleBarRect.Right -= Window.GetCaptionButtonWidth() * 4; // Hardcoded for now, should be calculated
+        return new Vector2(titleBarRect.Right, titleBarRect.Bottom);
     }
 
     public void SetTitlebarView(Action titlebarView)
     {
-        window.TitlebarView = titlebarView;
+        Window.TitlebarView = titlebarView;
     }
 
     public void SetView(Action view)
     {
-        window.View = view;
+        Window.View = view;
     }
 
     public void CreateWindow()
     {
-        window.Create(appOptions);
+        Window.Create(appOptions);
     }
 
     public void Run()
     {
-        window.Render();
-        window.Destroy();
+        Window.Render();
+        Window.Destroy();
     }
 }

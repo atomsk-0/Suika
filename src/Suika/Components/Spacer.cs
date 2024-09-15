@@ -21,7 +21,8 @@ public static unsafe class Spacer
         ImGui.Dummy(new Vector2(0, height));
     }
 
-    public static void SameLine(float spacing = 0, float offset = 0)
+    // Maybe rename this method to other name like Continue
+    public static void SameLine(float spacing = 0, float offset = 0, bool isSameLine = false)
     {
         var g = *ImGuiInternal.GImGui;
         ImGuiWindow* window = ImGuiInternal.GetCurrentWindow();
@@ -35,7 +36,7 @@ public static unsafe class Spacer
 
         window->DC.CurrLineSize = window->DC.PrevLineSize;
         window->DC.CurrLineTextBaseOffset = window->DC.PrevLineTextBaseOffset;
-        window->DC.IsSameLine = true;
+        window->DC.IsSameLine = isSameLine;
     }
 
     public static void Both(float width, float height)
