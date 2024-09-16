@@ -39,6 +39,7 @@ public interface IWindow
     public IBackend GetBackend();
 
     public Action<int, int>? OnResize { get; set; }
+    public Action? UserImGuiLoad { get; set; }
     public Action? View { get; set; }
     public Action? TitlebarView { get; set; }
 }

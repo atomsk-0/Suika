@@ -8,6 +8,7 @@ using Suika;
 using Suika.Components;
 using Suika.Data;
 using Suika.Types.Enums;
+using TerraFX.Interop.Windows;
 
 namespace SuikaLab;
 
@@ -18,6 +19,7 @@ internal static unsafe class Program
     private static readonly Font mainFont = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Inter-Medium.ttf"), 16f);
     private static readonly Font iconFont = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fa-regular-400.ttf"), 15f);
     private static string testInput = "Hello World!";
+    private static bool testCheckbox = false;
     private static Application app;
 
     public static void Main()
@@ -45,97 +47,22 @@ internal static unsafe class Program
 
     private static void renderView()
     {
-        Spacer.Vertical(20);
-        Child.Normal("test_child", new Vector2(200, 200), () =>
+        Spacer.Both(10, 10);
+        if (Button.Normal(id: "button_0", label: "Open context menu", font: mainFont, backgroundColor: Color.White, textColor: Color.Black,padding: new Vector2(6),rounding: 3f, hoverBackgroundColor: Color.CornflowerBlue, hoverTextColor: Color.Black))
         {
-            TextInput.Normal(label: "Hello World", labelFont: mainFont, inputFont: mainFont, text: ref testInput,
-                maxLength: 600, hint: "Test Hint", textColor: Color.White, backgroundColor: Color.FromArgb(10, 10, 10), borderColor: Color.FromArgb(20, 20, 20),
-                borderThickness: 1f, rounding: 3f, labelColor: Color.White, showLabel: true, padding: new Vector2(5, 5));
-        }, backgroundColor: Color.FromArgb(30, 30, 30), borderColor: Color.FromArgb(60, 60, 60), borderThickness: 1f, rounding: 6f);
-        /*Checkbox.Normal(id: "test_cb", size: mainFont.Size, font: mainFont, label: "Hello World", state: ref test,
-            uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
-            uncheckedTextColor: Color.FromArgb(200, 200, 200),
-            uncheckedBorderColor: Color.FromArgb(61, 61, 61),
-            hoveredBackgroundColor: Color.FromArgb(40, 40, 40),
-            hoveredTextColor: Color.FromArgb(200, 200, 200),
-            hoveredBorderColor: Color.FromArgb(71, 71, 71),
-            checkedBackgroundColor: Color.White,
-            checkedTextColor: Color.White,
-            checkedMarkColor: Color.Black,
-            rounding: 2f);
-        Spacer.Line(Color.White, 1f, 5f, 5f);
-        /*Checkbox.Normal(id: "test_cb1", size: mainFont.Size, font: mainFont, label: "Hello World 3", state: ref test,
-            uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
-            uncheckedTextColor: Color.FromArgb(200, 200, 200),
-            uncheckedBorderColor: Color.FromArgb(61, 61, 61),
-            hoveredBackgroundColor: Color.FromArgb(40, 40, 40),
-            hoveredTextColor: Color.FromArgb(200, 200, 200),
-            hoveredBorderColor: Color.FromArgb(71, 71, 71),
-            rounding: 2f);
-        Checkbox.Normal(id: "test_cb2", size: mainFont.Size, font: mainFont, label: "Hello World 4", state: ref test,
-            uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
-            uncheckedTextColor: Color.FromArgb(200, 200, 200),
-            uncheckedBorderColor: Color.FromArgb(61, 61, 61),
-            hoveredBackgroundColor: Color.FromArgb(40, 40, 40),
-            hoveredTextColor: Color.FromArgb(200, 200, 200),
-            hoveredBorderColor: Color.FromArgb(71, 71, 71),
-            rounding: 2f);
-        Checkbox.Normal(id: "test_cb3", size: mainFont.Size, font: mainFont, label: "Hello World 5", state: ref test,
-            uncheckedBackgroundColor: Color.FromArgb(30, 30, 30),
-            uncheckedTextColor: Color.FromArgb(200, 200, 200),
-            uncheckedBorderColor: Color.FromArgb(61, 61, 61),
-            hoveredBackgroundColor: Color.FromArgb(40, 40, 40),
-            hoveredTextColor: Color.FromArgb(200, 200, 200),
-            hoveredBorderColor: Color.FromArgb(71, 71, 71),
-            rounding: 2f);
-        Spacer.Vertical(8f);
-        ImGui.Text($"HELLO WORLD: {DateTime.UtcNow.ToLongTimeString()}");
-        ImGui.PushFont(mainFont.ImFont);
-        Spacer.Vertical(8f);
-        ImGui.Text($"HELLO WORLD: {DateTime.UtcNow.ToLongTimeString()}");
-        ImGui.PopFont();
-        ImGui.Text($"HELLO WORLD: {DateTime.UtcNow.ToLongTimeString()}");
-        Spacer.Vertical(25f);
-        Button.Normal(label: "Hello World",
-            id: "test1",
-            font: mainFont,
-            backgroundColor: Color.FromArgb(30, 30, 30),
-            textColor: Color.FromArgb(180, 180, 180),
-            hoverBackgroundColor: Color.FromArgb(40, 40, 40),
-            hoverTextColor: Color.FromArgb(255, 255, 255),
-            borderThickness: 1f,
-            borderColor: Color.FromArgb(50, 50, 50),
-            padding: new Vector2(3, 3),
-            radius: 3f);
-        Spacer.Vertical(10f);
-        Button.WithIcon(label: "Hello World",
-            id: "test2",
-            icon: "\u002b",
-            iconFont: iconFont,
-            labelFont: mainFont,
-            spaceBetween: 6f,
-            backgroundColor: Color.FromArgb(30, 30, 30),
-            textColor: Color.FromArgb(180, 180, 180),
-            hoverBackgroundColor: Color.FromArgb(40, 40, 40),
-            hoverTextColor: Color.FromArgb(255, 255, 255),
-            borderThickness: 1f,
-            borderColor: Color.FromArgb(50, 50, 50),
-            padding: new Vector2(3, 3),
-            radius: 3f);
-        Spacer.SameLine(10f);
-        Button.WithIcon(label: "",
-            id: "test3",
-            icon: "\u002b",
-            iconFont: iconFont,
-            labelFont: mainFont,
-            spaceBetween: 0f,
-            backgroundColor: Color.FromArgb(30, 30, 30),
-            textColor: Color.FromArgb(180, 180, 180),
-            hoverBackgroundColor: Color.FromArgb(40, 40, 40),
-            hoverTextColor: Color.FromArgb(255, 255, 255),
-            borderThickness: 1f,
-            borderColor: Color.FromArgb(50, 50, 50),
-            padding: new Vector2(3, 3),
-            radius: 3f);*/
+            ContextMenu.Show("button_0_context_menu");
+        }
+        ContextMenu.Normal(id: "button_0_context_menu", content: () =>
+        {
+            Text.Normal("Context menu item 0", mainFont, Color.White);
+        }, position: ContextMenuPosition.Left, windowPadding: new Vector2(4, 8), itemSpacing: new Vector2(4, 8), backgroundColor: Color.FromArgb(30, 30, 30), borderColor: Color.FromArgb(50, 50, 50), rounding: 3f, borderThickness: 1f);
+        Spacer.Vertical(10);
+        if (Checkbox.Normal(id: "checkbox_0", font: mainFont, label: "Checkbox 0", state: ref testCheckbox, size: mainFont.Size, 3f, uncheckedBackgroundColor: Color.FromArgb(30, 30, 30), checkedBackgroundColor: Color.White, checkedMarkColor: Color.Black, checkedTextColor: Color.White, uncheckedTextColor: Color.White, hoveredTextColor: Color.White, hoveredBackgroundColor: Color.FromArgb(50, 50, 50)))
+        {
+            Console.WriteLine("Checkbox 0 clicked!");
+        }
+        Tooltip.Normal(text: "This is a tooltip", font: mainFont, backgroundColor: Color.FromArgb(30, 30, 30), textColor: Color.White, padding: new Vector2(8, 8), borderColor: Color.FromArgb(60, 60, 60), borderThickness: 1f, rounding: 3f);
+        Spacer.Vertical(10);
+
     }
 }
