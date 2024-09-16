@@ -104,6 +104,7 @@ public unsafe partial class Window : IWindow
         UpdateWindow(handle);
 
         Platform.SetWindowStyle(handle, options);
+        UserImGuiLoad?.Invoke();
         loadUserFonts();
         InternalTitleBar.SetWindow(this);
 
@@ -130,7 +131,7 @@ public unsafe partial class Window : IWindow
     private void internalView()
     {
         InternalTitleBar.WindowsTitleBar(titleBarBackgroundColor, titleBarBorderColor, titleBarBorderThickness);
-        ImGui.SetCursorPos(new Vector2(0, IsMaximized() ? 6 : 0));
+        ImGui.SetCursorPos(new Vector2(0, IsMaximized() ? 8 : 0));
         TitlebarView?.Invoke();
         ImGui.SetCursorPos(new Vector2(0, GetTitleBarHeight() + titleBarBorderThickness));
         View?.Invoke();
@@ -277,6 +278,7 @@ public unsafe partial class Window : IWindow
 
 
     public Action<int, int>? OnResize { get; set; }
+    public Action? UserImGuiLoad { get; set; }
     public Action? View { get; set; }
 
     public Action? TitlebarView { get; set; }
