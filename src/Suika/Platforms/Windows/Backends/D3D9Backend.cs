@@ -137,7 +137,7 @@ public unsafe class D3D9Backend : IBackend
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(Platform.MX_PADDING * 2, 0));
             didSetPadding = true;
         }
-        ImGui.Begin("suika_imgui_window", null, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration);
+        ImGui.Begin("suika_imgui_window", null, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
         renderAction?.Invoke();
         ImGui.End();
         if (didSetPadding)
