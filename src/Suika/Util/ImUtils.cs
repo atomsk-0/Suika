@@ -7,24 +7,24 @@ using Mochi.DearImGui;
 
 namespace Suika.Util;
 
-internal static class ImUtils
+public static class ImUtils
 {
-    internal static uint ToUint32Color(this Color color)
+    public static uint ToUint32Color(this Color color)
     {
         return ImGui.GetColorU32(color.ToVector4Color());
     }
 
-    internal static Vector4 ToVector4Color(this Color color)
+    public static Vector4 ToVector4Color(this Color color)
     {
         return new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
     }
 
-    internal static uint ToUint32Color(this Color color, byte alpha)
+    public static uint ToUint32Color(this Color color, byte alpha)
     {
         return ImGui.GetColorU32(color.ToVector4Color(alpha));
     }
 
-    internal static Vector4 ToVector4Color(this Color color, byte alpha)
+    public static Vector4 ToVector4Color(this Color color, byte alpha)
     {
         return new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, alpha / 255f);
     }
