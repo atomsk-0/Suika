@@ -63,6 +63,16 @@ internal static unsafe class Program
         }
         Tooltip.Normal(text: "This is a tooltip", font: mainFont, backgroundColor: Color.FromArgb(30, 30, 30), textColor: Color.White, padding: new Vector2(8, 8), borderColor: Color.FromArgb(60, 60, 60), borderThickness: 1f, rounding: 3f);
         Spacer.Vertical(10);
-
+        Table.Normal("table_0", new Vector2(400, 200), ["Header 0", "Header 1"],
+        ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable | ImGuiTableFlags.ScrollY | ImGuiTableFlags.SizingStretchSame, () =>
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Table.NewRow();
+                    Text.Normal($"Row {i} Column 0", mainFont, Color.White);
+                    Table.NextColumn();
+                    Text.Normal($"Row {i} Column 1", mainFont, Color.White);
+                }
+            }, mainFont, mainFont, headerBg: Color.FromArgb(30, 30, 30), borderColor: Color.FromArgb(60, 60, 60), rowBg: Color.FromArgb(20, 20, 20), altRowBg: Color.FromArgb(25, 25 ,25));
     }
 }
