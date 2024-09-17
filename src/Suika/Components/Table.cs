@@ -11,6 +11,11 @@ namespace Suika.Components;
 
 public static unsafe class Table
 {
+    public static void Normal(string id, in Vector2 size, string[] headers, ImGuiTableFlags flags, Action content, TableNormalStyle style)
+    {
+        Normal(id, size, headers, flags, content, style.HeaderFont, style.TableFont, style.HeaderBg, style.RowBg, style.AltRowBg, style.BorderColor, style.HoveredHeaderColor, style.ClickedHeaderColor, style.HoveredBorderColor, style.ClickedBorderColor);
+    }
+
     public static void Normal(string id, in Vector2 size, string[] headers, ImGuiTableFlags flags, Action content, Font headerFont, Font tableFont,
         Color headerBg = default, Color rowBg = default, Color altRowBg = default, Color borderColor = default, Color hoveredHeaderColor = default,
         Color clickedHeaderColor = default, Color hoveredBorderColor = default, Color clickedBorderColor = default)
@@ -56,4 +61,18 @@ public static unsafe class Table
     {
         ImGui.TableNextColumn();
     }
+}
+
+public struct TableNormalStyle
+{
+    public Font HeaderFont { get; set; }
+    public Font TableFont { get; set; }
+    public Color HeaderBg { get; set; }
+    public Color RowBg { get; set; }
+    public Color AltRowBg { get; set; }
+    public Color BorderColor { get; set; }
+    public Color HoveredHeaderColor { get; set; }
+    public Color ClickedHeaderColor { get; set; }
+    public Color HoveredBorderColor { get; set; }
+    public Color ClickedBorderColor { get; set; }
 }
