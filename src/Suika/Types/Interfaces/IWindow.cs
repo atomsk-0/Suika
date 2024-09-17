@@ -25,6 +25,7 @@ public interface IWindow
     public float GetTitleBarHeight();
     public float GetCaptionButtonWidth();
     public RectF GetTitleBarRect();
+    public Vector2 GetRawViewSize();
     public Vector2 GetViewSize();
     public bool CanResize();
 

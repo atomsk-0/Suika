@@ -217,11 +217,17 @@ public unsafe partial class Window : IWindow
     }
 
 
-    public Vector2 GetViewSize()
+    public Vector2 GetRawViewSize()
     {
         RECT rect = default;
         GetClientRect(handle, &rect);
         return new Vector2(rect.right - rect.left, rect.bottom - rect.top);
+    }
+
+
+    public Vector2 GetViewSize()
+    {
+        return GetRawViewSize() - new Vector2(0, GetTitleBarHeight());
     }
 
 
