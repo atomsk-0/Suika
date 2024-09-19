@@ -40,39 +40,14 @@ internal static unsafe class Program
 
     private static void titlebarView()
     {
-        Spacer.Both(5, 10);
+        Spacer.Both(10);
         Text.Normal("Suika testing", mainFont, Color.White);
     }
 
 
     private static void renderView()
     {
-        Spacer.Both(10, 10);
-        if (Button.Normal(id: "button_0", label: "Open context menu", font: mainFont, backgroundColor: Color.White, textColor: Color.Black,padding: new Vector2(6),rounding: 3f, hoverBackgroundColor: Color.CornflowerBlue, hoverTextColor: Color.Black))
-        {
-            ContextMenu.Show("button_0_context_menu");
-        }
-        ContextMenu.Normal(id: "button_0_context_menu", content: () =>
-        {
-            Text.Normal("Context menu item 0", mainFont, Color.White);
-        }, position: ContextMenuPosition.Left, windowPadding: new Vector2(4, 8), itemSpacing: new Vector2(4, 8), backgroundColor: Color.FromArgb(30, 30, 30), borderColor: Color.FromArgb(50, 50, 50), rounding: 3f, borderThickness: 1f);
-        Spacer.Vertical(10);
-        if (Checkbox.Normal(id: "checkbox_0", font: mainFont, label: "Checkbox 0", state: ref testCheckbox, size: mainFont.Size, 3f, uncheckedBackgroundColor: Color.FromArgb(30, 30, 30), checkedBackgroundColor: Color.White, checkedMarkColor: Color.Black, checkedTextColor: Color.White, uncheckedTextColor: Color.White, hoveredTextColor: Color.White, hoveredBackgroundColor: Color.FromArgb(50, 50, 50)))
-        {
-            Console.WriteLine("Checkbox 0 clicked!");
-        }
-        Tooltip.Normal(text: "This is a tooltip", font: mainFont, backgroundColor: Color.FromArgb(30, 30, 30), textColor: Color.White, padding: new Vector2(8, 8), borderColor: Color.FromArgb(60, 60, 60), borderThickness: 1f, rounding: 3f);
-        Spacer.Vertical(10);
-        Table.Normal("table_0", new Vector2(400, 200), ["Header 0", "Header 1"],
-        ImGuiTableFlags.Borders | ImGuiTableFlags.Resizable | ImGuiTableFlags.ScrollY | ImGuiTableFlags.SizingStretchSame, () =>
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    Table.NewRow();
-                    Text.Normal($"Row {i} Column 0", mainFont, Color.White);
-                    Table.NextColumn();
-                    Text.Normal($"Row {i} Column 1", mainFont, Color.White);
-                }
-            }, mainFont, mainFont, headerBg: Color.FromArgb(30, 30, 30), borderColor: Color.FromArgb(60, 60, 60), rowBg: Color.FromArgb(20, 20, 20), altRowBg: Color.FromArgb(25, 25 ,25));
+        Spacer.Horizontal(20);
+        Link.Normal("Hello World!", mainFont, Color.White, Color.FromArgb(100, 100, 100), "");
     }
 }
