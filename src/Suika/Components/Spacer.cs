@@ -13,12 +13,12 @@ public static unsafe class Spacer
 {
     public static void Horizontal(float width)
     {
-        ImGui.Dummy(new Vector2(width, 0));
+        ImGui.SetCursorPos(new Vector2(ImGui.GetCursorPosX() + width, ImGui.GetCursorPosY()));
     }
 
     public static void Vertical(float height)
     {
-        ImGui.Dummy(new Vector2(0, height));
+        ImGui.SetCursorPos(new Vector2(ImGui.GetCursorPosX(), ImGui.GetCursorPosY() + height));
     }
 
     // Maybe rename this method to other name like Continue
@@ -41,7 +41,12 @@ public static unsafe class Spacer
 
     public static void Both(float width, float height)
     {
-        ImGui.Dummy(new Vector2(width, height));
+        ImGui.SetCursorPos(new Vector2(ImGui.GetCursorPosX() + width, ImGui.GetCursorPosY() + height));
+    }
+
+    public static void Both(float padding)
+    {
+        ImGui.SetCursorPos(new Vector2(ImGui.GetCursorPosX() + padding, ImGui.GetCursorPosY() + padding));
     }
 
     public static void Line(Color color, float thickness = 1f, float topSpacing = 0, float bottomSpacing = 0)
