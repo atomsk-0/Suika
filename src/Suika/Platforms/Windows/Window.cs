@@ -131,7 +131,7 @@ public unsafe partial class Window : IWindow
     private void internalView()
     {
         InternalTitleBar.WindowsTitleBar(titleBarBackgroundColor, titleBarBorderColor, titleBarBorderThickness);
-        ImGui.SetCursorPos(new Vector2(0, IsMaximized() ? 8 : 0));
+        ImGui.SetCursorPos(new Vector2(IsMaximized() ? 8 : 0));
         TitlebarView?.Invoke();
         ImGui.SetCursorPos(new Vector2(0, GetTitleBarHeight() + titleBarBorderThickness));
         View?.Invoke();
