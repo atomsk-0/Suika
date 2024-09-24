@@ -16,7 +16,7 @@ namespace SuikaLab;
 
 internal static unsafe class Program
 {
-    private static readonly Font mainFont = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Inter-Medium.ttf"), 16f);
+    internal static readonly Font MAIN_FONT = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Inter-Medium.ttf"), 16f);
     private static readonly Font iconFont = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fa-regular-400.ttf"), 15f);
     private static string testInput = "Hello World!";
     private static bool testCheckbox = false;
@@ -29,7 +29,7 @@ internal static unsafe class Program
         options.RenderBackend = RenderBackend.DirectX9;
 
         app = new Application(options);
-        app.AddFonts(mainFont, iconFont);
+        app.AddFonts(MAIN_FONT, iconFont);
         app.SetTitlebarStyle(Color.FromArgb(30, 30, 30), Color.FromArgb(50, 50, 50), 1f);
         app.SetTitlebarView(titlebarView);
         app.SetView(renderView);
@@ -41,13 +41,16 @@ internal static unsafe class Program
     private static void titlebarView()
     {
         Spacer.Both(10);
-        Text.Normal("Suika testing", mainFont, Color.White);
+        Text.Normal("Suika testing", MAIN_FONT, Color.White);
     }
 
 
     private static void renderView()
     {
         Spacer.Horizontal(20);
-        Link.Normal("Hello World!", mainFont, Color.White, Color.FromArgb(100, 100, 100), "");
+        Link.Normal("Hello World!", MAIN_FONT, Color.White, Color.FromArgb(100, 100, 100), () =>
+        {
+            ModalTest.INSTANCE.Show();
+        });
     }
 }

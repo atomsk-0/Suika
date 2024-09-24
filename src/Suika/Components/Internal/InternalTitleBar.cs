@@ -59,34 +59,33 @@ internal static unsafe class InternalTitleBar
         }
 
         ImGui.SetCursorPos(new Vector2(window->Size.X - captionButtonWidth, 0));
-        if (windowsTitlebarButton(Platform.CLOSE_ICON))
+        if (WindowsTitlebarButton(Platform.CLOSE_ICON))
         {
             platformWindow.Close();
         }
         ImGui.SetCursorPos(new Vector2(window->Size.X - captionButtonWidth * 2, 0));
         if (platformWindow.IsMaximized())
         {
-            if (windowsTitlebarButton(Platform.RESTORE_ICON, !platformWindow.CanResize()))
+            if (WindowsTitlebarButton(Platform.RESTORE_ICON, !platformWindow.CanResize()))
             {
                 platformWindow.Restore();
             }
         }
         else
         {
-            if (windowsTitlebarButton(Platform.MAXIMIZE_ICON, !platformWindow.CanResize()))
+            if (WindowsTitlebarButton(Platform.MAXIMIZE_ICON, !platformWindow.CanResize()))
             {
                 platformWindow.Maximize();
             }
         }
         ImGui.SetCursorPos(new Vector2(window->Size.X - captionButtonWidth * 3, 0));
-        if (windowsTitlebarButton(Platform.MINIMIZE_ICON))
+        if (WindowsTitlebarButton(Platform.MINIMIZE_ICON))
         {
             platformWindow.Minimize();
         }
     }
 
-
-    private static bool windowsTitlebarButton(string icon, bool disabled = false)
+    internal static bool WindowsTitlebarButton(string icon, bool disabled = false)
     {
         ImGuiWindow* window = ImGuiInternal.GetCurrentWindow();
         if (window->SkipItems) return false;

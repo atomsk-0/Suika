@@ -13,7 +13,6 @@ public class Application
     public readonly IWindow Window;
     private readonly AppOptions appOptions;
 
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Application"/> class with the specified application options.
     /// </summary>

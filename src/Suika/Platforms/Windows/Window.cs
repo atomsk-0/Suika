@@ -10,6 +10,7 @@ using Suika.Data;
 using Suika.Platforms.Windows.Backends;
 using Suika.Types.Enums;
 using Suika.Types.Interfaces;
+using Suika.Util;
 using TerraFX.Interop.Windows;
 using static TerraFX.Interop.Windows.Windows;
 
@@ -135,6 +136,7 @@ public unsafe partial class Window : IWindow
         TitlebarView?.Invoke();
         ImGui.SetCursorPos(new Vector2(0, GetTitleBarHeight() + titleBarBorderThickness));
         View?.Invoke();
+        ModalManager.RenderModals();
     }
 
 
